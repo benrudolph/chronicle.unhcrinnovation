@@ -2,4 +2,120 @@ extends layout
 
 block content
   h1 UNHCR Diction
-  input(type="text", placeholder="Search for a word... like innovation")
+  input(type="text", id="search", placeholder="Search for a word... like innovation")
+  div(id="figure")
+
+block scripts
+  script.
+    $(document).ready(function() {
+      var o = !{data}
+      console.log(o)
+      var ENTER = 13;
+      var DURATION = 500;
+
+      $('#search').on('keyup', function(e) {
+        if (e.keyCode == ENTER) {
+          $.get('/search', { query: $(e.currentTarget).val() }, function(response) {
+            c.data(response.rows)()
+          });
+
+        }
+
+      })
+
+      var chart = function(attrs) {
+        var defaults = {
+          height: 200,
+          width: 600,
+          svg: d3.select('#figure'),
+          data: [],
+          margin: { top: 10, bottom: 30, left: 30, right: 10 },
+          docs: []
+        };
+
+        _.defaults(attrs, defaults);
+
+        var x = d3.scale.linear()
+          .domain([0, attrs.docs.length])
+          .range([0, attrs.width])
+
+        var y = d3.scale.linear()
+          .domain([0, 50])
+          .range([attrs.height, 0])
+
+        var xAxis = d3.svg.axis()
+          .scale(x)
+          .orient("bottom")
+
+        var yAxis = d3.svg.axis()
+          .scale(y)
+          .ticks(5)
+          .orient("left")
+          .tickSize(-attrs.width, 0, 0)
+          .tickPadding(8);
+
+        var g = attrs.svg.append('svg')
+          .attr("width", attrs.width)
+          .attr("height", attrs.height)
+          .append("g")
+          .attr("transform", "translate(" + attrs.margin.left + "," + attrs.margin.top + ")");
+
+        g.append('g')
+          .attr('class', 'x axis')
+          .attr('transform', 'translate(0, ' + attrs.height + ')')
+          .call(xAxis)
+
+        g.append('g')
+          .attr('class', 'y axis')
+          .call(yAxis)
+
+        attrs.width = attrs.margin.left - attrs.margin.right;
+        attrs.height = attrs.margin.top - attrs.margin.bottom;
+
+        function render() {
+          var bars = g.selectAll('.bar').data(attrs.data);
+          bars.enter().append('rect')
+          bars
+            .attr('y', y(0))
+            .transition()
+            .duration(DURATION)
+            .attr('height', function(d, i) {
+              return y(0) - y(d.value.count);
+            })
+            .attr('y', function(d, i) {
+              return y(d.value.count);
+            })
+            .attr('x', function(d, i) {
+              return x(i);
+            })
+            .attr('width', function(d, i) {
+              return 1;
+            })
+            .attr('class', function(d, i) {
+              return ['bar', d.value.docId].join(' ');
+            });
+          bars.exit()
+            .transition()
+            .duration(DURATION)
+            .attr('height', 0)
+            .attr('y', y(0))
+            .remove()
+
+        }
+
+        render.data = function(_data) {
+          if (arguments.length) {
+            attrs.data = _data;
+            return render;
+          }
+          return attrs.data;
+        }
+
+        return render
+      }
+
+      var c = chart({
+        docs: o.rows
+      })
+      c()
+    });

@@ -9,7 +9,7 @@
     "express": "3.3.5",
     "jade": "*",
     "less-middleware": "*",
-    "felix-couchdb": "*"
-
+    "nano": "*",
+    "natural": "*"
   }
 }
