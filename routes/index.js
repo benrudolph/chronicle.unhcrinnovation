@@ -12,6 +12,15 @@ exports.index = function(req, res){
   });
 };
 
+exports.wordCounts = function(req, res) {
+  nano.dinosaur({
+    db: constants.DB_NAME,
+    path: '_all_docs'
+  }, function(err, body) {
+    res.json(200, body);
+  });
+};
+
 exports.search = function(req, res) {
   var query = req.param('query');
 
