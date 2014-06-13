@@ -9,7 +9,13 @@
     "express": "3.3.5",
     "jade": "*",
     "less-middleware": "*",
+    "underscore": "*",
     "nano": "*",
-    "natural": "*"
+    "natural": "*",
+    "ejs": "*",
+    "gulp": "*",
+    "stopwords": "*",
+    "json2csv": "*",
+    "sentence-tokenizer": "*"
   }
 }

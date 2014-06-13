@@ -25,27 +25,42 @@ block scripts
 
       var chart = function(attrs) {
         var defaults = {
-          height: 200,
-          width: 600,
+          height: 300,
           svg: d3.select('#figure'),
           data: [],
-          margin: { top: 10, bottom: 30, left: 30, right: 10 },
+          margin: { top: 10, bottom: 50, left: 50, right: 10 },
           docs: []
         };
 
+        var docHash = {}
+        _.each(attrs.docs, function(doc) {
+          docHash[doc.value.id] = doc.value
+        })
+
         _.defaults(attrs, defaults);
+        attrs.width = attrs.docs.length + attrs.margin.left + attrs.margin.right;
 
-        var x = d3.scale.linear()
-          .domain([0, attrs.docs.length])
-          .range([0, attrs.width])
-
-        var y = d3.scale.linear()
-          .domain([0, 50])
-          .range([attrs.height, 0])
+        var x = d3.scale.ordinal()
+          .domain(_.map(attrs.docs.sort(compareDocs), function(d) { return d.id; }))
+          .range(_.map(attrs.docs, function(d, i) { return i; }))
 
         var xAxis = d3.svg.axis()
           .scale(x)
           .orient("bottom")
+          .tickFormat('')
+          .tickSize(0);
+
+        var g = attrs.svg.append('svg')
+          .attr("width", attrs.width)
+          .attr("height", attrs.height)
+          .append("g")
+          .attr("transform", "translate(" + attrs.margin.left + "," + attrs.margin.top + ")");
+
+        attrs.height = attrs.height - attrs.margin.top - attrs.margin.bottom;
+
+        var y = d3.scale.linear()
+          .domain([0, 50])
+          .range([attrs.height, 0])
 
         var yAxis = d3.svg.axis()
           .scale(y)
@@ -53,12 +68,6 @@ block scripts
           .orient("left")
           .tickSize(-attrs.width, 0, 0)
           .tickPadding(8);
-
-        var g = attrs.svg.append('svg')
-          .attr("width", attrs.width)
-          .attr("height", attrs.height)
-          .append("g")
-          .attr("transform", "translate(" + attrs.margin.left + "," + attrs.margin.top + ")");
 
         g.append('g')
           .attr('class', 'x axis')
@@ -69,11 +78,15 @@ block scripts
           .attr('class', 'y axis')
           .call(yAxis)
 
-        attrs.width = attrs.margin.left - attrs.margin.right;
-        attrs.height = attrs.margin.top - attrs.margin.bottom;
 
         function render() {
-          var bars = g.selectAll('.bar').data(attrs.data);
+          max = d3.max(attrs.data, function(d) { return d.value.count }) || 0
+          if (max < 30)
+            max = 30;
+          y.domain([0, max])
+          var bars = g.selectAll('.bar').data(attrs.data.sort(compare), function(d) {
+            return d.value.docId;
+          });
           bars.enter().append('rect')
           bars
             .attr('y', y(0))
@@ -83,17 +96,21 @@ block scripts
               return y(0) - y(d.value.count);
             })
             .attr('y', function(d, i) {
+              console.log(d.value.count);
               return y(d.value.count);
             })
             .attr('x', function(d, i) {
-              return x(i);
+              return x(d.value.docId);
             })
             .attr('width', function(d, i) {
               return 1;
             })
             .attr('class', function(d, i) {
-              return ['bar', d.value.docId].join(' ');
-            });
+              return ['bar', d.value.docId, docHash[d.value.docId].author].join(' ');
+            })
+          bars.on('mouseover', function(d) {
+            console.log(new Date(docHash[d.value.docId].date));
+          })
           bars.exit()
             .transition()
             .duration(DURATION)
@@ -101,6 +118,18 @@ block scripts
             .attr('y', y(0))
             .remove()
 
+          g.select('.y.axis')
+            .transition()
+            .duration(DURATION)
+            .call(yAxis);
+
+        }
+
+        function compare(a, b) {
+          return new Date(docHash[b.value.docId].date) - new Date(+docHash[a.value.docId].date)
+        }
+        function compareDocs(a, b) {
+          return new Date(a.date) - new Date(b.date)
         }
 
         render.data = function(_data) {

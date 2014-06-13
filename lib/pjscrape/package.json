@@ -1,0 +1,8 @@
+{
+  "name": "speech-scrape",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "restler": "*"
+  }
+}
