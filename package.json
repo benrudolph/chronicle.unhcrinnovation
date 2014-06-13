@@ -16,6 +16,12 @@
     "gulp": "*",
     "stopwords": "*",
     "json2csv": "*",
-    "sentence-tokenizer": "*"
+    "Sentimental": "*",
+    "sentence-tokenizer": "*",
+    "sequelize": "*",
+    "mysql": "*",
+    "node-mysql": "*",
+    "lodash": "*",
+    "sequelize-cli": "*"
   }
 }
