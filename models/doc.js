@@ -13,6 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Doc.hasMany(models.WordDoc);
+        Doc.hasMany(models.SentenceDoc);
       }
     }
   });
