@@ -1,12 +1,9 @@
 extends layout
 
 block content
-  div(class="row")
+  header(class="row")
     div(class="col-md-12 text-center")
       h1 UNITED NATIONS
-  div(class="row")
-    div(class="col-md-12 text-center")
-      h3 High Commissioner for Refugees
   div(class="row")
     div(class="col-md-12")
       div(class="well")
@@ -14,7 +11,17 @@ block content
           != 'Search a word:&nbsp;'
         input(type="text", id="search", placeholder="")
 
-  div(id="figure")
+    div(id="figure", class="module")
+
+  div(class="row")
+    div(class="col-md-12")
+      h1 Sentiment Analysis over time
+    div(class="col-md-12")
+      div(id="timeline", class="module")
+
+  div(class="row")
+    div(class="col-md-12")
+      h1 Who says what?
 
 block scripts
   script.
