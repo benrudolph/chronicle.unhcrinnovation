@@ -6,7 +6,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
 
   initialize: function(attrs) {
     var defaults = {
-      height: 300,
+      height: 440,
       svg: d3.select('#figure'),
       data: [],
       margin: { top: 10, bottom: 50, left: 50, right: 10 },
@@ -75,105 +75,83 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     if (this.tippedEl) {
       $(this.tippedEl).tipsy('hide');
     }
-    // Background bars for hover
-    //var backgroundBars = this.g.selectAll('.background-bar')
-    //    .data(this.data.sort(this.compare.bind(this)), function(d) {
-    //      return d.documentId;
-    //    });
 
+    // Actual bars
+    max = d3.max(this.data, function(d) { return d.count; }) || 0;
+    if (max < 30)
+      max = 30;
 
-    //backgroundBars.enter().append('rect');
-    //backgroundBars
-    //  .attr('y', y(0))
-    //  .attr('original-title', 'her there')
-    //  .attr('height', function(d, i) {
-    //    return this.height;
-    //  }.bind(this))
-    //  .attr('y', function(d, i) {
-    //    return 0;
-    //  })
-    //  .attr('x', function(d, i) {
-    //    return x(d.documentId);
-    //  })
-    //  .attr('width', function(d, i) {
-    //    return 1;
-    //  })
-    //  .attr('class', function(d, i) {
-    //    return ['background-bar', d.documentId].join(' ');
-    //  });
-
-      // Actual bars
-      max = d3.max(this.data, function(d) { return d.count; }) || 0;
-      if (max < 30)
-        max = 30;
-
-      y.domain([0, max]);
-      var bars = this.g.selectAll('.bar').data(this.data.sort(this.compare.bind(this)), function(d) {
-        return d.documentId;
-      });
-      bars.enter().append('rect');
-      bars
-        .attr('class', function(d, i) {
-          return ['bar', d.documentId, docHash[d.documentId].get('author')].join(' ');
+    y.domain([0, max]);
+    var bars = this.g.selectAll('.bar').data(this.data.sort(this.compare.bind(this)), function(d) {
+      return d.documentId;
+    });
+    bars.enter().append('rect');
+    bars
+      .attr('class', function(d, i) {
+        return ['bar', d.documentId, docHash[d.documentId].get('author')].join(' ');
+      })
+      .attr('original-title', function(d) {
+        return self.tooltipTemplate.render(_.extend(d, docHash[d.documentId].toJSON()));
+      })
+      .transition()
+      .duration(Diction.Constants.DURATION)
+        .attr('y', y(0))
+        .attr('height', function(d, i) {
+          return y(0) - y(d.count);
         })
-        .attr('original-title', function(d) {
-          //return 'Date: ' + new Date(docHash[d.documentId].get('date')) + '\n' + 'Count: ' + d.count;
-          return self.tooltipTemplate.render(_.extend(d, docHash[d.documentId].toJSON()));
-        })
-        .transition()
-        .duration(Diction.Constants.DURATION)
-          .attr('y', y(0))
-          .attr('height', function(d, i) {
-            return y(0) - y(d.count);
-          })
-          .attr('y', function(d, i) { return y(d.count); })
-          .attr('x', function(d, i) { return x(d.documentId); })
-          .attr('width', function(d, i) { return 1; });
+        .attr('y', function(d, i) { return y(d.count); })
+        .attr('x', function(d, i) { return x(d.documentId); })
+        .attr('width', function(d, i) { return 1; });
 
-      bars.on('mouseover', function(d) {
-        if (self.tippedEl) {
-          $(self.tippedEl).tipsy('hide');
-        }
-        $el = $(this);
-        $el.tipsy('show');
+    bars.on('mouseover', function(d) {
+      if (self.tippedEl) {
+        $(self.tippedEl).tipsy('hide');
+      }
+      $el = $(this);
+      $el.tipsy('show');
 
-        // Show sentences on tooltip click
-        $('.tipsy-show a').on('click', function() {
-          $.get('/sentences', { word: d.word, documentId: d.documentId }, function(sentences) {
-            $el.attr('original-title', self.sentencesTemplate.render({
-              sentences: sentences
-            }));
+      // Show sentences on tooltip click
+      $('.tipsy-show a').on('click', function() {
+        $.get('/sentences', { word: d.word, documentId: d.documentId }, function(sentences) {
+          $el.attr('original-title', self.sentencesTemplate.render({
+            sentences: sentences
+          }));
+          $el.tipsy('show');
+
+          // Return to normal tooltip
+          $('.tipsy-back').on('click', function() {
+            var html = self.tooltipTemplate.render(_.extend(d, docHash[d.documentId].toJSON()));
+            $el.attr('original-title', html);
             $el.tipsy('show');
-
-            $('.tipsy-back').on('click', function() {
-              var html = self.tooltipTemplate.render(_.extend(d, docHash[d.documentId].toJSON()));
-              $el.attr('original-title', html);
-              $el.tipsy('show');
-            });
           });
         });
-
-        // Return to normal tooltip
-        self.tippedEl = this;
       });
 
-      bars.exit()
-        .transition()
-        .duration(Diction.Constants.DURATION)
-        .attr('height', 0)
-        .attr('y', y(0))
-        .remove();
-
-      this.g.select('.y.axis')
-        .transition()
-        .duration(Diction.Constants.DURATION)
-        .call(this.yAxis);
-
-      $('.bar').tipsy({
-        html: true,
-        trigger: 'manual',
-        gravity: 's'
+      $('.tipsy-close').on('click', function() {
+        $el.tipsy('hide');
+        self.tippedEl = null;
       });
+
+      self.tippedEl = this;
+    });
+
+    bars.exit()
+      .transition()
+      .duration(Diction.Constants.DURATION)
+      .attr('height', 0)
+      .attr('y', y(0))
+      .remove();
+
+    this.g.select('.y.axis')
+      .transition()
+      .duration(Diction.Constants.DURATION)
+      .call(this.yAxis);
+
+    $('.bar').tipsy({
+      html: true,
+      trigger: 'manual',
+      gravity: 's'
+    });
   },
 
   compare: function(a, b) {
