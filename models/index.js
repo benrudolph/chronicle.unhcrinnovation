@@ -4,7 +4,7 @@ var fs        = require('fs')
   , lodash    = require('lodash')
   , db        = {};
 
-var config = (JSON.parse(fs.readFileSync("config/config.json", "utf8")))[process.env.ENV || 'development'];
+var config = (JSON.parse(fs.readFileSync("config/config.json", "utf8")))[process.env.NODE_ENV || 'development'];
 var sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
     dialect: config.dialect
