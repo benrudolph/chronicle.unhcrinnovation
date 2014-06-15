@@ -6,6 +6,7 @@ set :scm, :git
 set :user, :deploy
 set :deploy_to, "/var/www/#{application}"
 set :use_sudo, false
+set :app_command, 'app.js'
 
 role :web, "176.58.105.165"                          # Your HTTP server, Apache/etc
 role :app, "176.58.105.165"                          # This may be the same as your `Web` server
