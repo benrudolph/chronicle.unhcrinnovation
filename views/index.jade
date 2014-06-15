@@ -1,187 +1,39 @@
 extends layout
 
 block content
-  h1 UNHCR Diction
-  input(type="text", id="search", placeholder="Search for a word... like innovation")
+  div(class="row")
+    div(class="col-md-12 text-center")
+      h1 UNITED NATIONS
+  div(class="row")
+    div(class="col-md-12 text-center")
+      h3 High Commissioner for Refugees
+  div(class="row")
+    div(class="col-md-12")
+      div(class="well")
+        label(for="search")
+          != 'Search a word:&nbsp;'
+        input(type="text", id="search", placeholder="")
+
   div(id="figure")
 
 block scripts
   script.
-    var Diction = {
-      Constants: {},
-      Figures: {},
-      Models: {}
-    }
     $(document).ready(function() {
-      Diction.docs = !{data}['rows'];
-      Diction.Constants.ENTER = 13;
-      Diction.Constants.DURATION = 500;
+      _.templateSettings.variable = "context";
 
       $('#search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {
-          $.get('/search', { query: $(e.currentTarget).val() }, function(response) {
-            c.data(response.rows)()
-          });
-
+          var query = $(e.currentTarget).val()
+          Diction.router.navigate(query, { trigger: true });
         }
 
-      })
+      });
 
-      Diction.Figures.chart = function(attrs) {
-        var defaults = {
-          height: 300,
-          svg: d3.select('#figure'),
-          data: [],
-          margin: { top: 10, bottom: 50, left: 50, right: 10 },
-          docs: []
-        };
-
-        var docHash = {}
-        _.each(attrs.docs, function(doc) {
-          docHash[doc.value.id] = doc.value
-        })
-
-        _.defaults(attrs, defaults);
-        attrs.width = attrs.docs.length + attrs.margin.left + attrs.margin.right;
-
-        var x = d3.scale.ordinal()
-          .domain(_.map(attrs.docs.sort(compareDocs), function(d) { return d.id; }))
-          .range(_.map(attrs.docs, function(d, i) { return i; }))
-
-        var xAxis = d3.svg.axis()
-          .scale(x)
-          .orient("bottom")
-          .tickFormat('')
-          .tickSize(0);
-
-        var g = attrs.svg.append('svg')
-          .attr("width", attrs.width)
-          .attr("height", attrs.height)
-          .append("g")
-          .attr("transform", "translate(" + attrs.margin.left + "," + attrs.margin.top + ")");
-
-        attrs.height = attrs.height - attrs.margin.top - attrs.margin.bottom;
-
-        var y = d3.scale.linear()
-          .domain([0, 50])
-          .range([attrs.height, 0])
-
-        var yAxis = d3.svg.axis()
-          .scale(y)
-          .ticks(5)
-          .orient("left")
-          .tickSize(-attrs.width, 0, 0)
-          .tickPadding(8);
-
-        g.append('g')
-          .attr('class', 'x axis')
-          .attr('transform', 'translate(0, ' + attrs.height + ')')
-          .call(xAxis)
-
-        g.append('g')
-          .attr('class', 'y axis')
-          .call(yAxis)
+      Diction.router = new Diction.Routers.IndexRouter({
+        docs: !{data}
+      });
+      Backbone.history.start();
 
 
-        function render() {
-          // Background bars for hover
-          var backgroundBars = g.selectAll('.background-bar').data(attrs.data.sort(compare), function(d) {
-            return d.value.docId;
-          });
-          backgroundBars.enter().append('rect')
-          backgroundBars
-            .attr('y', y(0))
-            .attr('original-title', 'her there')
-            .attr('height', function(d, i) {
-              return attrs.height;
-            })
-            .attr('y', function(d, i) {
-              return 0;
-            })
-            .attr('x', function(d, i) {
-              return x(d.value.docId);
-            })
-            .attr('width', function(d, i) {
-              return 1;
-            })
-            .attr('class', function(d, i) {
-              return ['background-bar', d.value.docId].join(' ');
-            })
 
-          // Actual bars
-          max = d3.max(attrs.data, function(d) { return d.value.count }) || 0
-          if (max < 30)
-            max = 30;
-          y.domain([0, max])
-          var bars = g.selectAll('.bar').data(attrs.data.sort(compare), function(d) {
-            return d.value.docId;
-          });
-          bars.enter().append('rect')
-          bars
-            .attr('y', y(0))
-            .transition()
-            .duration(Diction.Constants.DURATION)
-            .attr('height', function(d, i) {
-              return y(0) - y(d.value.count);
-            })
-            .attr('y', function(d, i) {
-              console.log(d.value.count);
-              return y(d.value.count);
-            })
-            .attr('x', function(d, i) {
-              return x(d.value.docId);
-            })
-            .attr('width', function(d, i) {
-              return 1;
-            })
-            .attr('class', function(d, i) {
-              return ['bar', d.value.docId, docHash[d.value.docId].author].join(' ');
-            })
-          bars.on('mouseover', function(d) {
-            console.log(new Date(docHash[d.value.docId].date));
-          })
-          bars.exit()
-            .transition()
-            .duration(Diction.Constants.DURATION)
-            .attr('height', 0)
-            .attr('y', y(0))
-            .remove()
-
-          g.select('.y.axis')
-            .transition()
-            .duration(Diction.Constants.DURATION)
-            .call(yAxis);
-
-          backgroundBars
-            .attr('original-title', function(d) {
-              return 'Date: ' + new Date(docHash[b.value.docId].date) + '\n' + 'Count: ' + d.count
-
-            })
-
-          $('.background-bar').tipsy();
-
-        }
-
-        function compare(a, b) {
-          return new Date(docHash[b.value.docId].date) - new Date(+docHash[a.value.docId].date)
-        }
-        function compareDocs(a, b) {
-          return new Date(a.date) - new Date(b.date)
-        }
-
-        render.data = function(_data) {
-          if (arguments.length) {
-            attrs.data = _data;
-            return render;
-          }
-          return attrs.data;
-        }
-
-        return render
-      }
-
-      var c = Diction.Figures.chart({
-        docs: Diction.docs
-      })
-      c()
     });

@@ -6,10 +6,19 @@ html
     link(rel='stylesheet', href='/stylesheets/tipsy.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    div(class="container-fluid")
+      block content
     script(src='/javascripts/jquery.min.js')
     script(src='/javascripts/jquery.tipsy.js')
     script(src='/javascripts/d3.js')
     script(src='/javascripts/underscore.js')
-    block scripts
+    script(src='/javascripts/backbone.js')
+    script(src='/javascripts/ejs.js')
+    script(src='/javascripts/diction.js')
     script(src='/javascripts/models/author.js')
+    script(src='/javascripts/models/doc.js')
+    script(src='/javascripts/collections/doc.js')
+    script(src='/javascripts/routers/index.js')
+    script(src='/javascripts/figures/freq_chart.js')
+
+    block scripts

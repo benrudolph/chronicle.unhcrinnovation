@@ -1,0 +1,8 @@
+<b>Sentences</b>
+<a class="tipsy-back">(return)</a>
+<% for (var i = 0; i < sentences.length; i++) { %>
+  <div>---</div>
+  <div>
+    <%= sentences[i].sentence.replace(new RegExp(sentences[i].raw, 'gi'), '<b>'+sentences[i].raw+'</b>') %>
+  </div>
+<% } %>

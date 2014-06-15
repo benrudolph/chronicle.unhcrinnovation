@@ -1,8 +1,3 @@
-Diction.Models.Author = function(options) {
+Diction.Models.Author = Backbone.Model.extend({
 
-}
-
-Diction.Models.Author.prototype.render = function() {
-
-}
-
+});

@@ -1,31 +1,35 @@
-var nano = require('nano')('http://localhost:5984');
 var constants = require('../lib/constants');
-var db = nano.use(constants.DB_NAME);
 var natural = require('natural');
+var db = require('../models');
 /*
  * GET home page.
  */
 
 exports.index = function(req, res){
-  db.view('application', 'by_id', function(err, body) {
-    res.render('index', { data: JSON.stringify(body) });
+  db.Doc.findAll().success(function(docs) {
+    res.render('index', { data: JSON.stringify(db.Doc.publicModels(docs)) });
   });
+
 };
 
 exports.wordCounts = function(req, res) {
-  nano.dinosaur({
-    db: constants.DB_NAME,
-    path: '_all_docs'
-  }, function(err, body) {
-    res.json(200, body);
-  });
 };
 
 exports.search = function(req, res) {
   var query = req.param('query');
 
-  db.view('application', 'by_word', { key: natural.PorterStemmer.stem(query) }, function(err, body) {
-    res.json(200, body);
+  db.WordDoc.findAll({ where: { word: natural.PorterStemmer.stem(query)  } }).success(function(docs) {
+
+    res.json(200, docs);
   });
 
+};
+
+exports.sentences = function(req, res) {
+  var word = req.param('word'),
+      documentId = req.param('documentId');
+
+  db.SentenceDoc.findAll({ where: { word: word, documentId: documentId } }).success(function(sentences) {
+    res.json(200, sentences);
+  });
 };

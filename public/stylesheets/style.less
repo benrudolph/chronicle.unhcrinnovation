@@ -1,10 +1,17 @@
+@black: rgb(30, 30, 30);
+@navy: #0B1822;
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  color: @black;
 }
 
 a {
-  color: #00B7FF;
+  color: @navy;
+  cursor: pointer;
+}
+
+a:hover {
+  color: @navy;
 }
 
 .axis path,
@@ -12,6 +19,14 @@ a {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
+}
+
+input {
+  border: 1px solid rgb(200, 200, 200);
+}
+
+.text-center {
+  text-align: center;
 }
 
 .axis text {
@@ -28,7 +43,6 @@ line {
 }
 
 .bar {
-  pointer-events: none;
 }
 
 @guterres: #a6cee3;
