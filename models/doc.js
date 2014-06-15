@@ -7,8 +7,8 @@ module.exports = function(sequelize, DataTypes) {
     title: DataTypes.STRING,
     date: DataTypes.STRING,
     by: DataTypes.STRING,
-    sentiment_comp: DataTypes.INTEGER,
-    sentiment_score: DataTypes.INTEGER,
+    sentimentComp: DataTypes.INTEGER,
+    sentimentScore: DataTypes.INTEGER,
     wordCount: DataTypes.INTEGER,
     content: DataTypes.TEXT
 
