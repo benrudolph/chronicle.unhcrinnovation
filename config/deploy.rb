@@ -23,6 +23,10 @@ namespace :db do
   task :config, :except => { :no_release => true }, :role => :app do
     run "cp -f ~/unhcrdiction.json #{release_path}/config/config.json"
   end
+
+  task :migrate, :except => { :no_release => true }, :role => :app do
+    run "cd #{release_path} && sequelize db:migrate"
+  end
 end
 
 after "deploy:finalize_update", "db:config"
