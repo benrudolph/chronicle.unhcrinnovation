@@ -2,8 +2,13 @@ var fs        = require('fs')
   , path      = require('path')
   , Sequelize = require('sequelize')
   , lodash    = require('lodash')
-  , sequelize = new Sequelize('unhcrdiction', 'root', null)
   , db        = {};
+
+var config = (JSON.parse(fs.readFileSync("config/config.json", "utf8")))[process.env.ENV || 'development'];
+var sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    dialect: config.dialect
+  });
 
 fs
   .readdirSync(__dirname)
