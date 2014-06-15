@@ -23,8 +23,9 @@ module.exports = function(sequelize, DataTypes) {
           return {
             id: model.id,
             documentId: model.documentId,
-            sentiment_comp: model.sentiment_comp,
-            sentiment_score: model.sentiment_score,
+            sentimentComp: model.sentimentComp,
+            sentimentScore: model.sentimentScore,
+            wordCount: model.wordCount,
             author: model.author,
             date: model.date,
             title: model.title

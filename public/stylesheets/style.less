@@ -5,6 +5,13 @@ body {
   color: @black;
 }
 
+header {
+  background-image: url('/images/hc.jpg');
+  min-height: 600px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 a {
   color: @navy;
   cursor: pointer;
@@ -14,11 +21,19 @@ a:hover {
   color: @navy;
 }
 
+.module {
+  text-align: center;
+}
+
 .axis path,
 .axis line {
   fill: none;
-  stroke: #000;
+  stroke: rgb(240, 240, 240);
   shape-rendering: crispEdges;
+}
+
+.timeline-circle {
+  opacity: .6;
 }
 
 input {
@@ -83,3 +98,14 @@ line {
 .Goedhart {
   fill: @Goedhart;
 }
+
+.voronoi {
+  fill: transparent;
+}
+
+#timeline .highlight {
+  opacity: 1;
+  stroke: black;
+  stroke-width: 1px
+}
+

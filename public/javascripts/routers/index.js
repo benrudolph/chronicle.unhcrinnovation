@@ -6,6 +6,11 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
     this.freqChart = new Diction.Figures.FreqChart({
       docs: Diction.docs
     });
+
+    this.timeline = new Diction.Figures.Timeline({
+      docs: Diction.docs
+    });
+    this.timeline.render();
   },
 
   routes: {
