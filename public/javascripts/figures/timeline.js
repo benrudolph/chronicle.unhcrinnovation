@@ -93,6 +93,7 @@ Diction.Figures.Timeline = Backbone.View.extend({
         if (self.tippedEl) {
           $(self.tippedEl).tipsy('hide');
           d3.select(self.tippedEl).classed('highlight', false);
+          $('.tipsy').remove();
         }
         $el = $('.timeline-circle.' + d.point.get('documentId'));
         $el.tipsy('show');

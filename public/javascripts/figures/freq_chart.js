@@ -106,6 +106,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     bars.on('mouseover', function(d) {
       if (self.tippedEl) {
         $(self.tippedEl).tipsy('hide');
+        $('.tipsy').remove();
       }
       $el = $(this);
       $el.tipsy('show');
