@@ -1,5 +1,6 @@
 @black: rgb(30, 30, 30);
 @navy: #0B1822;
+@selection: rgb(252, 239, 23);
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   color: @black;
@@ -35,15 +36,27 @@ a:hover {
 
 .module {
   text-align: center;
+  min-height: 600px;
 }
 
 #words-per-year {
   text-align: left;
 }
 
+#figure {
+  margin-top: 100px;
+}
+
 .words-per-year-container {
   display: inline-block;
 
+}
+
+::selection {
+	background: @selection; /* Safari */
+	}
+::-moz-selection {
+	background: @selection; /* Firefox */
 }
 
 .axis path,

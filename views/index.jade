@@ -7,36 +7,37 @@ block content
         h1 UNITED NATIONS
 
   div(class="content-wrapper", data-0="-webkit-transform: translate3d(-0px, 0px, 0px); transition: 0s; -webkit-transition: 0s;", data-500="-webkit-transform: translate3d(0p, -1800px, 0px); transition: 0s; -webkit-transition: 0s;")
-    div(class="row")
+    div(class="row", id="figure-container", class="module")
+      div(id="figure")
       div(class="col-md-12")
         label(for="search")
           != 'Search a word:&nbsp;'
         input(type="text", id="search", placeholder="")
 
-      div(id="figure", class="module")
 
-    div(class="row")
+    div(class="row", id="timeline-container", class="module")
       div(class="col-md-12")
         h1 Sentiment Analysis over time
       div(class="col-md-12")
-        div(id="timeline", class="module")
+        div(id="timeline")
 
-    div(class="row")
+    div(class="row", id="words-per-year-container", class="module")
       div(class="col-md-12")
         h1 Who says what?
-    div(class="row")
       div(class="col-md-12")
         div(class="well")
           label(for="search")
             != 'Search a word:&nbsp;'
           input(type="text", id="words-per-year-search", placeholder="")
       div(class="col-md-12")
-        div(id="words-per-year", class="module")
+        div(id="words-per-year")
 
 block scripts
   script.
     $(document).ready(function() {
       _.templateSettings.variable = "context";
+
+      var animated = {};
 
       $headerWrapper = $('.header-wrapper');
       $headerWrapper.css('width', $(window).width());
@@ -49,6 +50,39 @@ block scripts
           }, 100);
         fn();
       })
+
+      $(document).on('scroll', function(e) {
+        var fn = _.throttle(function() {
+            $.publish('scroll');
+
+            var freqChartOffset = Diction.skrollr.relativeToAbsolute($('#figure-container')[0], 'bottom',
+            'bottom')
+
+            if (window.scrollY > freqChartOffset && !animated['freqChart']) {
+              Diction.router.navigate('/freqchartRoute', { trigger: true });
+              animated['freqChart'] = true;
+            }
+
+            var timelineOffset = Diction.skrollr.relativeToAbsolute($('#timeline-container')[0], 'bottom',
+            'bottom')
+
+            if (window.scrollY > timelineOffset && !animated['timeline']) {
+              Diction.router.navigate('/timelineRoute', { trigger: true });
+              animated['timeline'] = true;
+            }
+
+            var wordsPerYearOffset = Diction.skrollr.relativeToAbsolute($('#words-per-year-container .words-per-year-container:first')[0],
+            'bottom', 'bottom')
+
+            if (window.scrollY > wordsPerYearOffset && !animated['wordsPerYear']) {
+              Diction.router.navigate('/wordsPerYearRoute', { trigger: true });
+              animated['wordsPerYear'] = true;
+            }
+
+          }, 100);
+        fn();
+
+      });
 
       $('#search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {

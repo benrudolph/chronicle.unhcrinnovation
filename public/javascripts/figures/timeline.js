@@ -58,6 +58,17 @@ Diction.Figures.Timeline = Backbone.View.extend({
       .y(function(d) { return this.y(d.get('sentimentComp')); }.bind(this));
 
 
+    $.subscribe('scroll', function() {
+      if (this.tippedEl)
+        $(this.tippedEl).tipsy('show');
+    }.bind(this));
+
+    $.subscribe('tipsy.hide', function() {
+      if (this.tippedEl) {
+        $(this.tippedEl).tipsy('hide');
+        this.tippedEl = null;
+      }
+    }.bind(this));
 
   },
 
@@ -69,7 +80,9 @@ Diction.Figures.Timeline = Backbone.View.extend({
 
 
     var circles = this.g.selectAll('.timeline-circle').data(this.docs.models);
-    circles.enter().append('circle');
+    circles.enter().append('circle')
+      .attr('r', 0);
+
     circles.attr('class', function(d, i) {
         return ['timeline-circle', d.get('author'), d.get('documentId')].join(' ');
       })
@@ -78,10 +91,13 @@ Diction.Figures.Timeline = Backbone.View.extend({
       })
       .attr('cx', function(d) { return x(new Date(+d.get('date'))); })
       .attr('cy', function(d) { return y(d.get('sentimentComp')); })
-      .attr('r', function(d) { return r(d.get('wordCount')); })
       .style('fill', function(d) {
         return self.colorInterpolate(self.yInterpolate(d.get('sentimentComp')));
-      });
+      })
+      .transition()
+      .duration(Diction.Constants.DURATION)
+      .delay(function(d, i) { return 2 * i; })
+        .attr('r', function(d) { return r(d.get('wordCount')); });
 
     var path = this.g.selectAll('.voronoi').data(this.voronoi(this.docs.models));
     path.enter().append('path');
@@ -91,10 +107,9 @@ Diction.Figures.Timeline = Backbone.View.extend({
       .attr('d', this.polygon)
       .on('mouseover', function(d) {
         if (self.tippedEl) {
-          $(self.tippedEl).tipsy('hide');
           d3.select(self.tippedEl).classed('highlight', false);
-          $('.tipsy').remove();
         }
+        $.publish('tipsy.hide');
         $el = $('.timeline-circle.' + d.point.get('documentId'));
         $el.tipsy('show');
 

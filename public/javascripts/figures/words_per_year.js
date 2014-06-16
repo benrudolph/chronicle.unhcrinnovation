@@ -39,8 +39,8 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
       .range([this.height, 0]);
 
     this.x = d3.time.scale()
-      .domain(d3.extent(this.data, function(d) {
-        return new Date(d.year, 1);
+      .domain(d3.extent(Diction.docs.models, function(d) {
+        return new Date(d.get('year'), 1);
       }))
       .range([0, this.width]);
 
@@ -54,6 +54,18 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
       .clipExtent([[0, 0], [this.width, this.height]])
       .x(function(d) { return this.x(new Date(d.year, 1)); }.bind(this))
       .y(function(d) { return this.y(d.perXWords); }.bind(this));
+
+    $.subscribe('scroll', function() {
+      if (this.tippedEl)
+        $(this.tippedEl).tipsy('show');
+    }.bind(this));
+
+    $.subscribe('tipsy.hide', function() {
+      if (this.tippedEl) {
+        $(this.tippedEl).tipsy('hide');
+        this.tippedEl = null;
+      }
+    }.bind(this));
   },
 
   render: function() {
@@ -67,6 +79,14 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
         return ['word-line'].join(' ');
       })
       .attr('d', this.lineFn);
+
+    var totalLength = line.node().getTotalLength();
+    line
+      .attr('stroke-dasharray', totalLength + ' ' + totalLength)
+      .attr('stroke-dashoffset', totalLength)
+      .transition()
+      .duration(Diction.Constants.DURATION)
+        .attr('stroke-dashoffset', 0);
 
     var circles = this.g.selectAll('.word-circle').data(this.data);
     circles.enter().append('circle');
@@ -83,12 +103,13 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
     path.attr('class', function(d, i) {
         return ['voronoi', d.point.year].join(' ');
       })
-      .attr('d', this.polygon)
+      .attr('d', this.polygon);
+
+
+
+    path
       .on('mouseover', function(d) {
-        if (self.tippedEl) {
-          $(self.tippedEl).tipsy('hide');
-          $('.tipsy').remove();
-        }
+        $.publish('tipsy.hide');
 
         $el = $('.words-per-year-' + self.word + ' .word-circle.' + d.point.year);
         $el.tipsy('show');

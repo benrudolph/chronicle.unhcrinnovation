@@ -9,7 +9,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       height: 440,
       svg: d3.select('#figure'),
       data: [],
-      margin: { top: 10, bottom: 50, left: 50, right: 10 },
+      margin: { top: 10, bottom: 20, left: 50, right: 10 },
       docs: new Diction.Collections.Doc()
     };
 
@@ -62,6 +62,19 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     this.g.append('g')
       .attr('class', 'y axis')
       .call(this.yAxis);
+
+    $.subscribe('scroll', function() {
+      if (this.tippedEl)
+        $(this.tippedEl).tipsy('show');
+    }.bind(this));
+
+    $.subscribe('tipsy.hide', function() {
+      if (this.tippedEl) {
+        $(this.tippedEl).tipsy('hide');
+        this.tippedEl = null;
+      }
+    }.bind(this));
+
   },
 
   render: function() {
@@ -80,12 +93,16 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     max = d3.max(this.data, function(d) { return d.count; }) || 0;
     if (max < 30)
       max = 30;
+    else
+      max += (max * (2 / 5));
 
     y.domain([0, max]);
     var bars = this.g.selectAll('.bar').data(this.data.sort(this.compare.bind(this)), function(d) {
       return d.documentId;
     });
-    bars.enter().append('rect');
+    bars.enter().append('rect')
+      .attr('y', y(0))
+      .attr('height', 0);
     bars
       .attr('class', function(d, i) {
         return ['bar', d.documentId, docHash[d.documentId].get('author')].join(' ');
@@ -95,7 +112,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       })
       .transition()
       .duration(Diction.Constants.DURATION)
-        .attr('y', y(0))
+        .delay(function(d, i) { return i * 2; })
         .attr('height', function(d, i) {
           return y(0) - y(d.count);
         })
@@ -104,10 +121,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
         .attr('width', function(d, i) { return 1; });
 
     bars.on('mouseover', function(d) {
-      if (self.tippedEl) {
-        $(self.tippedEl).tipsy('hide');
-        $('.tipsy').remove();
-      }
+      $.publish('tipsy.hide');
       $el = $(this);
       $el.tipsy('show');
 

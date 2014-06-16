@@ -1,7 +1,7 @@
 var Diction = {
   Constants: {
     ENTER: 13,
-    DURATION: 500
+    DURATION: 1000
   },
   Figures: {},
   Routers: {},
