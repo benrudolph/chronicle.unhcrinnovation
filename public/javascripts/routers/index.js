@@ -54,8 +54,10 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
     if (!query)
       query = Diction.Constants.DEFAULT_QUERY;
 
+    NProgress.start();
     $.get('/search', { query: query }, function(response) {
       this.freqChart.dataFn(response).render();
+      NProgress.done();
     }.bind(this));
   },
 

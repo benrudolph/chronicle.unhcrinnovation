@@ -163,6 +163,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
   },
 
   onShowSentences: function(d, $el) {
+    NProgress.start();
     $.get('/sentences', { word: d.word, documentId: d.documentId }, function(sentences) {
       $el.attr('original-title', this.sentencesTemplate.render({
         sentences: sentences
@@ -171,6 +172,8 @@ Diction.Figures.FreqChart = Backbone.View.extend({
 
       // Return to normal tooltip
       $('.tipsy-back').on('click', function() { this.onReturn(d, $el); }.bind(this));
+
+      NProgress.done();
     }.bind(this));
 
   },
