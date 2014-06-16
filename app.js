@@ -32,6 +32,7 @@ app.get('/', routes.index);
 app.get('/search', routes.search);
 app.get('/word_counts', routes.wordCounts);
 app.get('/sentences', routes.sentences);
+app.get('/words_per_year', routes.wordsPerYear);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

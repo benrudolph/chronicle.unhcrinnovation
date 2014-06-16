@@ -10,13 +10,14 @@ module.exports = function(sequelize, DataTypes) {
     sentimentComp: DataTypes.INTEGER,
     sentimentScore: DataTypes.INTEGER,
     wordCount: DataTypes.INTEGER,
-    content: DataTypes.TEXT
+    content: DataTypes.TEXT,
+    year: DataTypes.INTEGER
 
   }, {
     classMethods: {
       associate: function(models) {
-        Doc.hasMany(models.WordDoc);
-        Doc.hasMany(models.SentenceDoc);
+        Doc.hasMany(models.WordDoc, { foreignKey: 'documentId' });
+        Doc.hasMany(models.SentenceDoc, { foreignKey: 'documentId' });
       },
       publicModels: function(models) {
         return _.map(models, function(model) {
@@ -28,6 +29,7 @@ module.exports = function(sequelize, DataTypes) {
             wordCount: model.wordCount,
             author: model.author,
             date: model.date,
+            year: model.year,
             title: model.title
           };
         });

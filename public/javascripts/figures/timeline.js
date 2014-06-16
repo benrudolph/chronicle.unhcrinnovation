@@ -114,7 +114,7 @@ Diction.Figures.Timeline = Backbone.View.extend({
       html: true,
       trigger: 'manual',
       gravity: 's',
-      offset: 5
+      offset: 25
     });
 
   },

@@ -12,6 +12,10 @@ header {
   background-repeat: no-repeat;
 }
 
+.row {
+  padding: 0 50px;
+}
+
 a {
   color: @navy;
   cursor: pointer;
@@ -25,11 +29,25 @@ a:hover {
   text-align: center;
 }
 
+#words-per-year {
+  text-align: left;
+}
+
+.words-per-year-container {
+  display: inline-block;
+
+}
+
 .axis path,
 .axis line {
   fill: none;
   stroke: rgb(240, 240, 240);
   shape-rendering: crispEdges;
+}
+
+.svg-words-per-year {
+  fill: none;
+  stroke: black;
 }
 
 .timeline-circle {

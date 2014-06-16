@@ -22,6 +22,14 @@ block content
   div(class="row")
     div(class="col-md-12")
       h1 Who says what?
+  div(class="row")
+    div(class="col-md-12")
+      div(class="well")
+        label(for="search")
+          != 'Search a word:&nbsp;'
+        input(type="text", id="words-per-year-search", placeholder="")
+    div(class="col-md-12")
+      div(id="words-per-year", class="module")
 
 block scripts
   script.
@@ -32,6 +40,22 @@ block scripts
         if (e.keyCode == Diction.Constants.ENTER) {
           var query = $(e.currentTarget).val()
           Diction.router.navigate(query, { trigger: true });
+        }
+
+      });
+
+      $('#words-per-year-search').on('keyup', function(e) {
+        if (e.keyCode == Diction.Constants.ENTER) {
+          var query = $(e.currentTarget).val()
+          $wordsPerYear = $('#words-per-year');
+          $wordsPerYear.prepend(Diction.Templates.wordsPerYear.render({ word: query }));
+          $.get('/words_per_year', { query: query }).success(function(rows) {
+            var wordsPerYear = new Diction.Figures.WordsPerYear({
+              data: rows,
+              svg: d3.select('.words-per-year-' + query)
+            });
+            wordsPerYear.render();
+          });
         }
 
       });

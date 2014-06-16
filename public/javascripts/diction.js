@@ -8,6 +8,9 @@ var Diction = {
   Models: {},
   Views: {},
   Collections: {},
+  Templates: {
+    wordsPerYear: new EJS({ url: '/templates/words_per_year.html.ejs'}),
+  },
   Authors: {
     'guterres': 'Antonio Guterres',
     'lubbers': 'Rudd Lubbers',

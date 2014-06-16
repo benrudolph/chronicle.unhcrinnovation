@@ -1,9 +1,11 @@
 var constants = require('../lib/constants');
 var natural = require('natural');
 var db = require('../models');
+var queries = require('../queries/queries');
 /*
  * GET home page.
  */
+
 
 exports.index = function(req, res){
   db.Doc.findAll().success(function(docs) {
@@ -21,6 +23,16 @@ exports.search = function(req, res) {
   db.WordDoc.findAll({ where: { word: natural.PorterStemmer.stem(query)  } }).success(function(docs) {
 
     res.json(200, docs);
+  });
+
+};
+
+exports.wordsPerYear = function(req, res) {
+  console.log(req.param('query'));
+  var query = natural.PorterStemmer.stem(req.param('query'));
+
+  db.sequelize.query(queries.WordsPerYear(query)).success(function(rows) {
+    res.json(200, rows);
   });
 
 };
