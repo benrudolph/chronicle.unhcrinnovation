@@ -14,7 +14,7 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
     });
     this.timeline.render();
 
-    this.words = ['camps', 'syria', 'innovation', 'germany', 'urban', 'education',
+    this.words = ['camps', 'Syria', 'innovation', 'Germany', 'urban', 'education',
       'sudan', 'peace', 'lebanon'];
     $wordsPerYear = $('#words-per-year');
     _.each(this.words, function(word) {
