@@ -52,7 +52,8 @@ block scripts
           $.get('/words_per_year', { query: query }).success(function(rows) {
             var wordsPerYear = new Diction.Figures.WordsPerYear({
               data: rows,
-              svg: d3.select('.words-per-year-' + query)
+              svg: d3.select('.words-per-year-' + query),
+              word: query
             });
             wordsPerYear.render();
           });

@@ -98,13 +98,7 @@ Diction.Figures.Timeline = Backbone.View.extend({
         $el = $('.timeline-circle.' + d.point.get('documentId'));
         $el.tipsy('show');
 
-        $('.tipsy-close').on('click', function() {
-          $el.tipsy('hide');
-          d3.select(self.tippedEl).classed('highlight', false);
-          self.tippedEl = null;
-        });
-
-        d3.select($el[0]).moveToFront();
+        //d3.select($el[0]).moveToFront();
         d3.select($el[0]).classed('highlight', true);
 
         self.tippedEl = $el[0];
@@ -119,11 +113,11 @@ Diction.Figures.Timeline = Backbone.View.extend({
 
   },
 
-   polygon: function(d) {
-     if (!d || !d.length)
-       return "M0 0";
-     return "M" + d.join("L") + "Z";
-   }
+  polygon: function(d) {
+    if (!d || !d.length)
+      return "M0 0";
+    return "M" + d.join("L") + "Z";
+  }
 
 });
 

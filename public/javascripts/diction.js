@@ -10,6 +10,7 @@ var Diction = {
   Collections: {},
   Templates: {
     wordsPerYear: new EJS({ url: '/templates/words_per_year.html.ejs'}),
+    wordsPerYearTooltip: new EJS({ url: '/templates/words_per_year_tooltip.html.ejs'}),
   },
   Authors: {
     'guterres': 'Antonio Guterres',

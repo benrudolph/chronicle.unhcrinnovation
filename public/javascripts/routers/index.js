@@ -23,7 +23,8 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
       $.get('/words_per_year', { query: word }).success(function(rows) {
         var wordsPerYear = new Diction.Figures.WordsPerYear({
           data: rows,
-          svg: d3.select('.words-per-year-' + word)
+          svg: d3.select('.words-per-year-' + word),
+          word: word
         });
         wordsPerYear.render();
       }.bind(this));

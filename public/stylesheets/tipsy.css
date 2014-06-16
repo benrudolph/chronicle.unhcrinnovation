@@ -1,7 +1,13 @@
-.tipsy { font-size: 10px; position: absolute; padding: 5px; z-index: 100000; }
+.tipsy {
+  font-size: 10px;
+  position: absolute;
+  padding: 5px;
+  z-index: 100000;
+  pointer-events: none;
+}
 
   .tipsy-inner {
-    background-color: rgb(240,240,240);
+    background-color: white;
     color: black;
     max-width: 200px;
     max-height: 350px;
