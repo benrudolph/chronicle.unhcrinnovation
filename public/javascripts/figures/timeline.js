@@ -31,11 +31,11 @@ Diction.Figures.Timeline = Backbone.View.extend({
     this.width = this.width - this.margin.left - this.margin.right;
 
     this.y = d3.scale.linear()
-      .domain([.2, -.2])
+      .domain([.16, -.16])
       .range([0, this.height]);
 
     this.yInterpolate = d3.scale.linear()
-      .domain([.2, -.2])
+      .domain([.16, -.16])
       .range([0, 1]);
 
     this.colorInterpolate = d3.interpolateRgb('#c0392b', '#3498db');
@@ -66,6 +66,7 @@ Diction.Figures.Timeline = Backbone.View.extend({
     $.subscribe('tipsy.hide', function() {
       if (this.tippedEl) {
         $(this.tippedEl).tipsy('hide');
+        d3.select(this.tippedEl).classed('highlight', false);
         this.tippedEl = null;
       }
     }.bind(this));
@@ -106,9 +107,6 @@ Diction.Figures.Timeline = Backbone.View.extend({
       })
       .attr('d', this.polygon)
       .on('mouseover', function(d) {
-        if (self.tippedEl) {
-          d3.select(self.tippedEl).classed('highlight', false);
-        }
         $.publish('tipsy.hide');
         $el = $('.timeline-circle.' + d.point.get('documentId'));
         $el.tipsy('show');

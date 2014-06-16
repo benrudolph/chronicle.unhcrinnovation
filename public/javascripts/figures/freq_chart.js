@@ -64,8 +64,13 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       .call(this.yAxis);
 
     $.subscribe('scroll', function() {
-      if (this.tippedEl)
-        $(this.tippedEl).tipsy('show');
+      if (this.tippedEl) {
+        var $el = $(this.tippedEl);
+        var d = $el[0].__data__;
+        $el.tipsy('show');
+        $('.tipsy-back').on('click', function() { this.onReturn(d, $el); }.bind(this));
+        $('.tipsy-show a').on('click', function() { this.onShowSentences(d, $el); }.bind(this));
+      }
     }.bind(this));
 
     $.subscribe('tipsy.hide', function() {
@@ -129,21 +134,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       $('.tipsy').css('pointer-events', 'auto');
 
       // Show sentences on tooltip click
-      $('.tipsy-show a').on('click', function() {
-        $.get('/sentences', { word: d.word, documentId: d.documentId }, function(sentences) {
-          $el.attr('original-title', self.sentencesTemplate.render({
-            sentences: sentences
-          }));
-          $el.tipsy('show');
-
-          // Return to normal tooltip
-          $('.tipsy-back').on('click', function() {
-            var html = self.tooltipTemplate.render(_.extend(d, docHash[d.documentId].toJSON()));
-            $el.attr('original-title', html);
-            $el.tipsy('show');
-          });
-        });
-      });
+      $('.tipsy-show a').on('click', function() { self.onShowSentences(d, $el) }.bind(self));
 
       self.tippedEl = this;
     });
@@ -169,6 +160,26 @@ Diction.Figures.FreqChart = Backbone.View.extend({
 
   compare: function(a, b) {
     return new Date(this.docHash[b.documentId].get('date')) - new Date(+this.docHash[a.documentId].get('date'));
+  },
+
+  onShowSentences: function(d, $el) {
+    $.get('/sentences', { word: d.word, documentId: d.documentId }, function(sentences) {
+      $el.attr('original-title', this.sentencesTemplate.render({
+        sentences: sentences
+      }));
+      $el.tipsy('show');
+
+      // Return to normal tooltip
+      $('.tipsy-back').on('click', function() { this.onReturn(d, $el); }.bind(this));
+    }.bind(this));
+
+  },
+
+  onReturn: function(d, $el) {
+    var html = this.tooltipTemplate.render(_.extend(d, this.docHash[d.documentId].toJSON()));
+    $el.attr('original-title', html);
+    $el.tipsy('show');
+    $('.tipsy-show a').on('click', function() { this.onShowSentences(d, $el); }.bind(this));
   },
 
   dataFn: function(_data) {

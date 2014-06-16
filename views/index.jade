@@ -67,7 +67,7 @@ block scripts
               animated['freqChart'] = true;
             }
 
-            var timelineOffset = Diction.skrollr.relativeToAbsolute($('#timeline-container')[0], 'bottom',
+            var timelineOffset = Diction.skrollr.relativeToAbsolute($('#timeline-container #timeline')[0], 'bottom',
             'bottom')
 
             if (window.scrollY > timelineOffset && !animated['timeline']) {
@@ -91,7 +91,7 @@ block scripts
       $('#search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {
           var query = $(e.currentTarget).val()
-          Diction.router.navigate(query, { trigger: true });
+          Diction.router.navigate('/freqchartRoute/' + query, { trigger: true });
         }
 
       });
