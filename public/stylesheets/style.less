@@ -7,13 +7,14 @@ body {
 
 header {
   background-image: url('/images/hc.jpg');
-  min-height: 600px;
+  height: 100%;
+  width: 100%;
   background-size: cover;
   background-repeat: no-repeat;
+  position: relative;
 }
 
 .row {
-  padding: 0 50px;
 }
 
 a {
@@ -23,6 +24,13 @@ a {
 
 a:hover {
   color: @navy;
+}
+
+.content-wrapper {
+  position: relative;
+  margin-top: -40px;
+  padding: 0 50px;
+  background-color: white;
 }
 
 .module {

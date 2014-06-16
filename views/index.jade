@@ -1,40 +1,54 @@
 extends layout
 
 block content
-  header(class="row")
-    div(class="col-md-12 text-center")
-      h1 UNITED NATIONS
-  div(class="row")
-    div(class="col-md-12")
-      div(class="well")
+  header(data-0="-webkit-transform: translate3d(-0px, 0px, 0px); transition: 0s; -webkit-transition: 0s;", data-500="-webkit-transform: translate3d(0p, -1000px, 0px); transition: 0s; -webkit-transition: 0s;")
+    div(class="header-wrapper")
+      div(class="col-md-12 text-center")
+        h1 UNITED NATIONS
+
+  div(class="content-wrapper", data-0="-webkit-transform: translate3d(-0px, 0px, 0px); transition: 0s; -webkit-transition: 0s;", data-500="-webkit-transform: translate3d(0p, -1800px, 0px); transition: 0s; -webkit-transition: 0s;")
+    div(class="row")
+      div(class="col-md-12")
         label(for="search")
           != 'Search a word:&nbsp;'
         input(type="text", id="search", placeholder="")
 
-    div(id="figure", class="module")
+      div(id="figure", class="module")
 
-  div(class="row")
-    div(class="col-md-12")
-      h1 Sentiment Analysis over time
-    div(class="col-md-12")
-      div(id="timeline", class="module")
+    div(class="row")
+      div(class="col-md-12")
+        h1 Sentiment Analysis over time
+      div(class="col-md-12")
+        div(id="timeline", class="module")
 
-  div(class="row")
-    div(class="col-md-12")
-      h1 Who says what?
-  div(class="row")
-    div(class="col-md-12")
-      div(class="well")
-        label(for="search")
-          != 'Search a word:&nbsp;'
-        input(type="text", id="words-per-year-search", placeholder="")
-    div(class="col-md-12")
-      div(id="words-per-year", class="module")
+    div(class="row")
+      div(class="col-md-12")
+        h1 Who says what?
+    div(class="row")
+      div(class="col-md-12")
+        div(class="well")
+          label(for="search")
+            != 'Search a word:&nbsp;'
+          input(type="text", id="words-per-year-search", placeholder="")
+      div(class="col-md-12")
+        div(id="words-per-year", class="module")
 
 block scripts
   script.
     $(document).ready(function() {
       _.templateSettings.variable = "context";
+
+      $headerWrapper = $('.header-wrapper');
+      $headerWrapper.css('width', $(window).width());
+      $headerWrapper.css('height', $(window).height());
+      $(window).on('resize', function(e) {
+
+        var fn = _.throttle(function() {
+            $headerWrapper.css('width', $(window).width());
+            $headerWrapper.css('height', $(window).height());
+          }, 100);
+        fn();
+      })
 
       $('#search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {
@@ -65,6 +79,8 @@ block scripts
         docs: !{data}
       });
       Backbone.history.start();
+
+      Diction.skrollr = skrollr.init();
 
 
 
