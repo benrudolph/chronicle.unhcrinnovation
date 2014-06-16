@@ -1,7 +1,8 @@
 var Diction = {
   Constants: {
     ENTER: 13,
-    DURATION: 1000
+    DURATION: 1000,
+    DEFAULT_QUERY: 'refugee'
   },
   Figures: {},
   Routers: {},

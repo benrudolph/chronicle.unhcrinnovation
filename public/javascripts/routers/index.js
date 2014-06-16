@@ -38,7 +38,6 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
     'timelineRoute': 'timelineRoute',
     'wordsPerYearRoute': 'wordsPerYearRoute',
     'wordsPerYearRoute/:word': 'wordsPerYearRoute',
-    ':query': 'query',
   },
 
   wordsPerYearRoute: function() {
@@ -53,7 +52,7 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
 
   freqchartRoute: function(query) {
     if (!query)
-      query = 'refugee';
+      query = Diction.Constants.DEFAULT_QUERY;
 
     $.get('/search', { query: query }, function(response) {
       this.freqChart.dataFn(response).render();
