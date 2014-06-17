@@ -85,7 +85,8 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
       this.freqChart.dataFn(response).render();
 
       var sum = _.reduce(response, function(memo, d) { return memo + d.count; }, 0);
-      $('#figure-container .current-word').text(query + ': ' + Diction.Formats.COMMA(sum) + ' occurences');
+      var speechCount = _.uniq(response, function(d) { return d.documentId; }).length;
+      $('#figure-container .current-word').text(query + ': ' + Diction.Formats.COMMA(sum) + ' occurences in ' + speechCount + ' speeches');
       $('#figure-container #search').val('');
       NProgress.done();
     }.bind(this));

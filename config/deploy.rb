@@ -28,7 +28,7 @@ namespace :db do
   end
 
   task :migrate, :except => { :no_release => true }, :role => :app do
-    run "cd #{release_path} && sequelize db:migrate"
+    run "cd #{release_path} && sequelize --migrate"
   end
 end
 

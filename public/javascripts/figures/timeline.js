@@ -8,7 +8,7 @@ Diction.Figures.Timeline = Backbone.View.extend({
       width: 800,
       svg: d3.select('#timeline'),
       data: [],
-      margin: { top: 30, bottom: 10, left: 10, right: 110 },
+      margin: { top: 30, bottom: 10, left: 110, right: 110 },
       docs: new Diction.Collections.Doc()
     };
 
@@ -30,7 +30,7 @@ Diction.Figures.Timeline = Backbone.View.extend({
     this.height = this.height - this.margin.top - this.margin.bottom;
     this.width = this.width - this.margin.left - this.margin.right;
 
-    var domain = [.16, -.16];
+    var domain = [.17, -.17];
 
     this.y = d3.scale.linear()
       .domain(domain)
@@ -40,10 +40,8 @@ Diction.Figures.Timeline = Backbone.View.extend({
       .domain(domain)
       .range([100, -100]);
 
-
-
     this.yInterpolate = d3.scale.linear()
-      .domain([.16, -.16])
+      .domain(domain)
       .range([0, 1]);
 
     this.colorInterpolate = d3.interpolateRgb('#c0392b', '#3498db');
@@ -66,16 +64,11 @@ Diction.Figures.Timeline = Backbone.View.extend({
 
     this.g.append('text')
       .attr('y', this.y(0))
-      .attr('x', this.width + 10)
-      .attr('text-anchor', 'start')
+      .attr('x', -10)
+      .attr('text-anchor', 'end')
       .attr('dy', '.3em')
       .attr('class', 'svg-label')
       .text('neutral');
-
-    this.voronoi = d3.geom.voronoi()
-      .clipExtent([[0, 0], [this.width, this.height]])
-      .x(function(d) { return this.x(new Date(+d.get('date'))); }.bind(this))
-      .y(function(d) { return this.y(d.get('sentimentComp')); }.bind(this));
 
     this.brush = d3.svg.brush()
       .x(this.x)
@@ -138,23 +131,18 @@ Diction.Figures.Timeline = Backbone.View.extend({
       .delay(function(d, i) { return 2 * i; })
         .attr('r', function(d) { return r(d.get('wordCount')); });
 
-    //var path = this.g.selectAll('.voronoi').data(this.voronoi(this.docs.models));
-    //path.enter().append('path');
-    //path.attr('class', function(d, i) {
-    //    return ['voronoi', d.point.get('author'), d.point.get('documentId')].join(' ');
-    //  })
-    //  .attr('d', this.polygon)
-    //  .on('mouseover', function(d) {
-    //    $.publish('tipsy.hide');
-    //    $el = $('.timeline-circle.' + d.point.get('documentId'));
-    //    $el.tipsy('show');
+    circles.on('click', function(d) {
+        window.open('http://www.unhcr.org/' + d.get('documentId') + '.html', '_blank')
+      })
+      .on('mouseover', function(d) {
+        self.g.selectAll('.timeline-circle').classed('highlight', false);
+        d3.select(this).classed('highlight', true);
+      })
+      .on('mouseleave', function(d) {
+        d3.select(this).classed('highlight', false);
+      });
 
-    //    //d3.select($el[0]).moveToFront();
-    //    d3.select($el[0]).classed('highlight', true);
-
-    //    self.tippedEl = $el[0];
-    //  });
-
+    // AVERAGE LINE
     var avg = _.reduce(this.docs.pluck('sentimentComp'), function(memo, num) { return memo +  num }, 0) / this.docs.length;
     var avgLine = this.g.selectAll('.avg-line').data([avg]);
     avgLine.enter().append('line');
@@ -186,6 +174,65 @@ Diction.Figures.Timeline = Backbone.View.extend({
       offset: 25
     });
 
+    // MAX LINE
+    var max = this.docs.max(function(d) { return d.get('sentimentComp'); });
+    var maxLine = this.g.selectAll('.max-line').data([max]);
+    maxLine.enter().append('line');
+    maxLine
+      .attr('class', 'max-line')
+      .attr('x1', this.x(new Date(+max.get('date'))))
+      .attr('x2', this.width)
+      .style('stroke', function(d) {
+        return self.colorInterpolate(self.yInterpolate(d.get('sentimentComp')));
+      })
+      .transition()
+      .duration(Diction.Constants.DURATION)
+        .attr('y1', function(d) { return y(d.get('sentimentComp')); })
+        .attr('y2', function(d) { return y(d.get('sentimentComp')); });
+
+    var maxLabel = this.g.selectAll('.max-label').data([max]);
+    maxLabel.enter().append('text');
+    maxLabel
+      .attr('class', 'max-text')
+      .attr('x', this.width + 10)
+      .attr('text-anchor', 'start')
+      .attr('dy', '.3em')
+      .attr('class', 'svg-label max-label')
+      .text('max: ' + this.yHuman(max.get('sentimentComp')).toFixed())
+      .transition()
+      .duration(Diction.Constants.DURATION)
+        .attr('y', function(d) { return y(d.get('sentimentComp')); });
+
+    // MIN LINE
+    var min = this.docs.min(function(d) { return d.get('sentimentComp'); });
+    var minLine = this.g.selectAll('.min-line').data([min]);
+    minLine.enter().append('line');
+    minLine
+      .attr('class', 'min-line')
+      .attr('x1', this.x(new Date(+min.get('date'))))
+      .attr('x2', this.width)
+      .style('stroke', function(d) {
+        return self.colorInterpolate(self.yInterpolate(d.get('sentimentComp')));
+      })
+      .transition()
+      .duration(Diction.Constants.DURATION)
+        .attr('y1', function(d) { return y(d.get('sentimentComp')); })
+        .attr('y2', function(d) { return y(d.get('sentimentComp')); });
+
+    var minLabel = this.g.selectAll('.min-label').data([min]);
+    minLabel.enter().append('text');
+    minLabel
+      .attr('class', 'min-text')
+      .attr('x', this.width + 10)
+      .attr('text-anchor', 'start')
+      .attr('dy', '.3em')
+      .attr('class', 'svg-label min-label')
+      .text('min: ' + this.yHuman(min.get('sentimentComp')).toFixed())
+      .transition()
+      .duration(Diction.Constants.DURATION)
+        .attr('y', function(d) { return y(d.get('sentimentComp')); });
+
+
   },
 
   polygon: function(d) {
@@ -202,14 +249,14 @@ Diction.Figures.Timeline = Backbone.View.extend({
       extent = this.x.domain();
       removeLabels = true;
     }
-    var docCount = 0;
-    var avg = _.reduce(this.docs.models, function(memo, doc) {
+    var filteredDocs = _.filter(this.docs.models, function(doc) {
       var date = new Date(+doc.get('date'));
-      if (date >= extent[0] && date <= extent[1]) {
-        docCount += 1;
-        return memo + doc.get('sentimentComp');
-      }
-      return memo; }, 0) / docCount;
+      return  date >= extent[0] && date <= extent[1];
+    });
+    var avg = _.reduce(filteredDocs, function(memo, doc) { return memo + doc.get('sentimentComp'); }, 0) / filteredDocs.length;
+
+    var max = _.max(filteredDocs, function(d) { return d.get('sentimentComp'); });
+    var min = _.min(filteredDocs, function(d) { return d.get('sentimentComp'); });
 
     if (!avg)
       return;
@@ -219,15 +266,41 @@ Diction.Figures.Timeline = Backbone.View.extend({
       .attr('y1', function(d) { return this.y(d); }.bind(this))
       .attr('y2', function(d) { return this.y(d); }.bind(this));
 
-    if (removeLabels) {
-      this.g.selectAll('.brush-label, .diff-label').remove();
-      return;
-    }
-
     var avgLabel = this.g.selectAll('.avg-label').data([avg]);
     avgLabel
       .attr('y', function(d) { return this.y(d); }.bind(this))
       .text('average: ' + this.yHuman(avg).toFixed());
+
+    var maxLine = this.g.selectAll('.max-line').data([max]);
+    maxLine
+      .transition()
+      .duration(100)
+      .attr('x1', this.x(new Date(+max.get('date'))))
+      .attr('y1', function(d) { return this.y(d.get('sentimentComp')); }.bind(this))
+      .attr('y2', function(d) { return this.y(d.get('sentimentComp')); }.bind(this));
+
+    var maxLabel = this.g.selectAll('.max-label').data([max]);
+    maxLabel
+      .attr('y', function(d) { return this.y(d.get('sentimentComp')); }.bind(this))
+      .text('max: ' + this.yHuman(max.get('sentimentComp')).toFixed());
+
+    var minLine = this.g.selectAll('.min-line').data([min]);
+    minLine
+      .transition()
+      .duration(100)
+      .attr('x1', this.x(new Date(+min.get('date'))))
+      .attr('y1', function(d) { return this.y(d.get('sentimentComp')); }.bind(this))
+      .attr('y2', function(d) { return this.y(d.get('sentimentComp')); }.bind(this));
+
+    var minLabel = this.g.selectAll('.min-label').data([min]);
+    minLabel
+      .attr('y', function(d) { return this.y(d.get('sentimentComp')); }.bind(this))
+      .text('min: ' + this.yHuman(min.get('sentimentComp')).toFixed());
+
+    if (removeLabels) {
+      this.g.selectAll('.brush-label, .diff-label').remove();
+      return;
+    }
 
     var brushLabel = this.g.selectAll('.brush-label').data(extent);
     brushLabel.enter().append('text');

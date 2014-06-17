@@ -247,6 +247,16 @@ text {
 
 .timeline-circle {
   opacity: .6;
+  cursor: pointer;
+  -moz-transition:all .5s;
+  -webkit-transition:all .5s;
+  -o-transition:all .5s;
+  transition:all .5s;
+}
+
+.timeline-circle.highlight {
+  opacity: 1;
+  stroke: @gray;
 }
 
 input {
@@ -327,11 +337,5 @@ line {
 .voronoi {
   fill: transparent;
   stroke: none;
-}
-
-#timeline .highlight {
-  opacity: 1;
-  stroke: black;
-  stroke-width: 1px
 }
 
