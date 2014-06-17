@@ -63,6 +63,17 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       .attr('class', 'y axis')
       .call(this.yAxis);
 
+    this.brush = d3.svg.brush()
+      .x(this.x)
+      .on("brush", this.brushed.bind(this));
+
+    this.g.append('g')
+      .attr('class', 'brush')
+      .call(this.brush)
+      .selectAll('rect')
+        .attr('y', 0)
+        .attr('height', this.height);
+
     $.subscribe('scroll', function() {
       if (this.tippedEl) {
         var $el = $(this.tippedEl);
@@ -79,6 +90,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
         this.tippedEl = null;
       }
     }.bind(this));
+    this.info = ['query', 'speeches', 'occurences'];
 
     // Legend
 
@@ -125,6 +137,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
         docHash = this.docHash;
 
 
+    this.g.selectAll(".brush").call(this.brush.clear());
 
     if (this.tippedEl) {
       $(this.tippedEl).tipsy('hide');
@@ -188,17 +201,147 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       .duration(Diction.Constants.DURATION)
       .call(this.yAxis);
 
+    // Info labels
+    var infoRects = this.g.selectAll('.info-rect').data(this.info);
+    infoRects.enter().append('rect');
+    infoRects.attr('class', 'info-rect')
+      .attr('x', function(d, i) { return (i / self.info.length) * self.width; })
+      .attr('y', 0)
+      .attr('height', 30)
+      .attr('width', this.width / this.info.length);
+
+
+    var infoText = this.g.selectAll('.info-label').data(this.info);
+    infoText.enter().append('text');
+    infoText.attr('x', function(d, i) { return (i / self.info.length) * self.width + 8; })
+      .attr('class', 'info-label')
+      .attr('y', 0)
+      .attr('dy', '1.4em')
+      .text(function(d) {
+        if (d == 'query') {
+          return d + ': ' + self.query;
+        } else if (d == 'occurences') {
+          var sum = _.reduce(self.data, function(memo, d) { return memo + d.count; }, 0);
+          return d + ': ' + Diction.Formats.COMMA(sum);
+        } else {
+          var speechCount = _.uniq(self.data, function(d) { return d.documentId; }).length;
+          return d + ': ' + speechCount;
+        }
+      });
+
+    // AVERAGE LINE
+    var avg = _.reduce(this.data, function(memo, doc) { return memo +  doc.count }, 0) / this.data.length;
+    var avgLine = this.g.selectAll('.avg-line').data([avg]);
+    avgLine.enter().append('line');
+    avgLine
+      .attr('class', 'avg-line')
+      .attr('x1', 0)
+      .attr('x2', this.width)
+      .transition()
+      .duration(Diction.Constants.DURATION)
+        .attr('y1', function(d) { return y(d); })
+        .attr('y2', function(d) { return y(d); });
+
+    var avgLabel = this.g.selectAll('.avg-label').data([avg]);
+    avgLabel.enter().append('text');
+    avgLabel
+      .attr('class', 'avg-text')
+      .attr('x', this.width + 10)
+      .attr('text-anchor', 'start')
+      .attr('dy', '.3em')
+      .attr('class', 'svg-label avg-label')
+      .text('average: ' + avg.toFixed())
+      .transition()
+      .duration(Diction.Constants.DURATION)
+        .attr('y', function(d) { return y(d); });
+
+    // MAX LINE
+    var max = _.max(this.data, function(d) { return d.count; });
+    var maxLine = this.g.selectAll('.max-line').data([max]);
+    maxLine.enter().append('line');
+    maxLine
+      .attr('class', 'max-line ' + Diction.authors.get(max.author).cssClass())
+      .attr('x1', this.x(max.documentId))
+      .attr('x2', this.width)
+      .transition()
+      .duration(Diction.Constants.DURATION)
+        .attr('y1', function(d) { return y(d.count); })
+        .attr('y2', function(d) { return y(d.count); });
+
+    var maxLabel = this.g.selectAll('.max-label').data([max]);
+    maxLabel.enter().append('text');
+    maxLabel
+      .attr('class', 'max-text')
+      .attr('x', this.width + 10)
+      .attr('text-anchor', 'start')
+      .attr('dy', '.3em')
+      .attr('class', 'svg-label max-label')
+      .text('max: ' + max.count.toFixed())
+      .transition()
+      .duration(Diction.Constants.DURATION)
+        .attr('y', function(d) { return y(d.count); });
+
 
 
     $('.bar').tipsy({
-      html: true,
       trigger: 'manual',
-      gravity: 's'
     });
   },
 
   compare: function(a, b) {
     return new Date(this.docHash[b.documentId].get('date')) - new Date(+this.docHash[a.documentId].get('date'));
+  },
+
+  brushed: function() {
+    var self = this;
+    var extent = this.brush.extent();
+
+    if (+extent[0] === +extent[1]) {
+      extent = [0, this.width];
+    }
+    var filteredDocs = _.filter(self.data, function(doc) {
+        var value = self.x(doc.documentId);
+        return value >= extent[0] && value <= extent[1];
+      })
+
+    var infoText = this.g.selectAll('.info-label').data(this.info)
+      .text(function(d) {
+        if (d == 'query') {
+          return d + ': ' + self.query;
+        } else if (d == 'occurences') {
+          var sum = _.reduce(filteredDocs, function(memo, d) { return memo + d.count; }, 0);
+          return d + ': ' + Diction.Formats.COMMA(sum);
+        } else {
+          var speechCount = _.uniq(filteredDocs, function(d) { return d.documentId; }).length;
+          return d + ': ' + speechCount;
+        }
+      });
+
+    var avg = _.reduce(filteredDocs, function(memo, doc) { return memo +  doc.count }, 0) / filteredDocs.length;
+    var max = _.max(filteredDocs, function(d) { return d.count; });
+
+    var avgLine = this.g.selectAll('.avg-line').data([avg]);
+    avgLine
+      .attr('y1', function(d) { return this.y(d); }.bind(this))
+      .attr('y2', function(d) { return this.y(d); }.bind(this));
+
+    var avgLabel = this.g.selectAll('.avg-label').data([avg]);
+    avgLabel
+      .attr('y', function(d) { return this.y(d); }.bind(this))
+      .text('average: ' + avg.toFixed());
+
+    var maxLine = this.g.selectAll('.max-line').data([max]);
+    maxLine
+      .attr('class', 'max-line ' + Diction.authors.get(max.author).cssClass())
+      .attr('x1', this.x(max.documentId))
+      .attr('y1', function(d) { return this.y(d.count); }.bind(this))
+      .attr('y2', function(d) { return this.y(d.count); }.bind(this));
+
+    var maxLabel = this.g.selectAll('.max-label').data([max]);
+    maxLabel
+      .attr('y', function(d) { return this.y(d.count); }.bind(this))
+      .text('max: ' + max.count.toFixed());
+
   },
 
   onShowSentences: function(d, $el) {
@@ -208,6 +351,9 @@ Diction.Figures.FreqChart = Backbone.View.extend({
         sentences: sentences
       }));
       $el.tipsy('show');
+
+      // Overrive pointer-events in style sheet
+      $('.tipsy').addClass('clickable');
 
       // Return to normal tooltip
       $('.tipsy-back').on('click', function() { this.onReturn(d, $el); }.bind(this));
@@ -222,6 +368,9 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     $el.attr('original-title', html);
     $el.tipsy('show');
     $('.tipsy-show a').on('click', function() { this.onShowSentences(d, $el); }.bind(this));
+
+    // Overrive pointer-events in style sheet
+    $('.tipsy').addClass('clickable');
   },
 
   dataFn: function(_data) {
@@ -230,6 +379,14 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       return this;
     }
     return this.data;
+  },
+
+  queryFn: function(_query) {
+    if (arguments.length) {
+      this.query = _query;
+      return this;
+    }
+    return this.query;
   }
 
 

@@ -26,7 +26,7 @@ Diction.Figures.Author = Backbone.View.extend({
 
     this.maxBars = 10;
 
-    this.stopWords = ['i', 'the', 'in', '000', 'mr', 'we', 'it'];
+    this.stopWords = ['i', 'the', 'in', '000', 'mr', 'we', 'it', 'year', 'general', 'years'];
 
     this.data = _.filter(this.data, function(d) {
       return this.stopWords.indexOf(d.raw) === -1;

@@ -273,8 +273,6 @@ Diction.Figures.Timeline = Backbone.View.extend({
 
     var maxLine = this.g.selectAll('.max-line').data([max]);
     maxLine
-      .transition()
-      .duration(100)
       .attr('x1', this.x(new Date(+max.get('date'))))
       .attr('y1', function(d) { return this.y(d.get('sentimentComp')); }.bind(this))
       .attr('y2', function(d) { return this.y(d.get('sentimentComp')); }.bind(this));
@@ -286,8 +284,6 @@ Diction.Figures.Timeline = Backbone.View.extend({
 
     var minLine = this.g.selectAll('.min-line').data([min]);
     minLine
-      .transition()
-      .duration(100)
       .attr('x1', this.x(new Date(+min.get('date'))))
       .attr('y1', function(d) { return this.y(d.get('sentimentComp')); }.bind(this))
       .attr('y2', function(d) { return this.y(d.get('sentimentComp')); }.bind(this));
