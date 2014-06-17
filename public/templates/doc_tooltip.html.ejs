@@ -1,18 +1,18 @@
-<p class="tipsy-title">
-  <a href="http://www.unhcr.org/<%= documentId %>.html"><%= title %></a>
-</p>
-<p class="tipsy-date">
-  <%= new Date(+date) %>
-</p>
-<p class="tipsy-sentiment">
+<h1 class="<%= Diction.authors.get(author).cssClass() %>">
+  <%= Diction.authors.get(author).get('fullname') %>
+</h1>
+<h2 class="tipsy-sentiment">
   Sentiment Score: <%= human %>
-</p>
-<p class="tipsy-sentiment">
+</h2>
+<h2 class="tipsy-sentiment">
   Word Count: <%= wordCount %>
-</p>
-<p class="tipsy-author">
-  -&nbsp;<%= Diction.authors.get(author).get('fullname') %>
-</p>
+</h2>
+<h3 class="tipsy-title">
+  <a href="http://www.unhcr.org/<%= documentId %>.html"><%= title %></a>
+</h3>
+<h3 class="tipsy-date">
+  <%= new Date(+date) %>
+</h3>
 
 
 

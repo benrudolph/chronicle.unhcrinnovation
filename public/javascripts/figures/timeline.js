@@ -179,6 +179,7 @@ Diction.Figures.Timeline = Backbone.View.extend({
   },
 
   brushed: function(d) {
+    var self = this;
     var extent = this.brush.extent();
     if (+extent[0] === +extent[1]) {
       extent = this.x.domain();
@@ -204,6 +205,54 @@ Diction.Figures.Timeline = Backbone.View.extend({
     avgLabel
       .attr('y', function(d) { return this.y(d); }.bind(this))
       .text('average: ' + this.yHuman(avg).toFixed());
+
+    var brushLabel = this.g.selectAll('.brush-label').data(extent);
+    brushLabel.enter().append('text');
+    brushLabel.attr('x', function(d, i) {
+        return self.x(d) + (i === 0 ? -5 : 5 );
+      })
+      .attr('y', this.height - 5)
+      .attr('class', 'brush-label svg-label')
+      .attr('text-anchor', function(d, i) { return i === 0 ? 'end' : 'start'; })
+      .text(function(d) { return Diction.Constants.MONTHS[d.getMonth()] + ' ' + d.getFullYear(); });
+
+    var differenceLabel = this.g.selectAll('.diff-label').data([extent[1] - extent[0]]);
+    differenceLabel.enter().append('text');
+    differenceLabel.attr('x', function(d, i) {
+        return self.x(new Date(extent[1] - ((extent[1] - extent[0]) / 2)));
+      })
+      .attr('y', this.height - 20)
+      .attr('class', 'diff-label svg-label')
+      .attr('text-anchor', function(d, i) { return 'middle' })
+      .text(function(d) {
+        // seconds
+        var value,
+            months,
+            years;
+        value = d / 1000;
+
+        // minutes
+        value /= 60;
+
+        // hours
+        value /= 60;
+
+        // days
+        value /= 24;
+
+        // years
+        years = value / 365;
+
+        // months
+        months = value / 30.5;
+
+        if (years > 1)
+          return years.toFixed(1) + ' years';
+        else
+          return months.toFixed() + ' months';
+
+      });
+
 
   }
 

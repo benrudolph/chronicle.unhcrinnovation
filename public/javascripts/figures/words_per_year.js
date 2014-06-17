@@ -130,7 +130,8 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
       .attr('cx', function(d) { return x(new Date(d.year, 1)); })
       .attr('cy', function(d) { return y(d.perXWords); })
       .attr('original-title', function(d) {
-        return self.tooltipTemplate.render(_.extend(d, { perWord: self.perXWords }));
+        return self.tooltipTemplate.render(_.extend(d, { perWord: self.perXWords,
+          author: self.findAuthorForYear(d.year) }));
       })
       .attr('r', 3);
 
@@ -154,13 +155,7 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
         d = self.tippedEl.__data__;
 
         var crosshair = self.g.selectAll('.crosshair').data([d]);
-        var authorData = _.sortBy(Diction.authors.models, function(d) { return d.get('hc'); });
-        var author = _.find(authorData, function(author) {
-          return author.get('endYear') > d.year;
-        });
-
-        if (!author)
-          author = _.last(authorData);
+        var author = self.findAuthorForYear(d.year);
 
         crosshair.enter().append('line');
         crosshair
@@ -178,6 +173,19 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
       trigger: 'manual',
       offset: 3
     });
+  },
+
+  findAuthorForYear: function(year) {
+    var authorData = _.sortBy(Diction.authors.models, function(d) { return d.get('hc'); });
+    var author = _.find(authorData, function(author) {
+      return author.get('endYear') > year;
+    });
+
+    if (!author)
+      author = _.last(authorData);
+
+    return author;
+
   },
 
   polygon: function(d) {

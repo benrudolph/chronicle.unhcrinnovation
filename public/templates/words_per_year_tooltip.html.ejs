@@ -1,3 +1,12 @@
-<p>
-  <%= perXWords.toFixed(2) %> times mentioned per <%= perWord %> words in <%= year %>
-</p>
+<h1 class="<%= author.cssClass() %>">
+  <%= author.get('fullname') %>
+</h1>
+<h2>
+  <%= perXWords.toFixed(2) %> mentions per <%= perWord %> words
+</h2>
+<h3>
+  Year <%= year %>
+</h3>
+
+
+

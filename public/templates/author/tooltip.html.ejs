@@ -1,6 +1,9 @@
-<p>
-  <%= wordCount %> - Total mentions
-</p>
-<p>
-  <%= (wordCount * (1000 / totalWordCount)).toFixed(2) %> - Mentions per 1000 words
-</p>
+<h1>
+  <%= raw %>
+</h1>
+<h2>
+  Total mentions: <%= wordCount %>
+</h2>
+<h2>
+  Mentions per 1000 words <%= (wordCount * (1000 / totalWordCount)).toFixed(2) %>
+</h2>

@@ -180,6 +180,18 @@ a:hover {
 
 }
 
+text {
+  pointer-events: none;
+}
+
+.transparent {
+  fill: transparent;
+}
+
+.word-bar {
+  pointer-events: none;
+}
+
 .card-header {
   margin-bottom: 10px;
   h1 {
@@ -187,11 +199,9 @@ a:hover {
     margin: 0;
   }
   h2 {
-    font-size: 16px;
-    font-style: italic;
+    font-size: 14px;
     margin: 0;
     margin-top: 3px;
-    font-weight: bold
   }
 
   h3 {
@@ -201,6 +211,14 @@ a:hover {
     margin-top: 3px;
   }
 
+}
+
+.card-header:before {
+  content: '';
+  border-top: 2px black solid;
+  display: block;
+  width: 22px;
+  margin-bottom: 12px;
 }
 
 .voronoi {
@@ -266,33 +284,44 @@ line {
 
 .guterres {
   fill: @guterres;
+  color: @guterres;
 }
 .lubbers {
   fill: @lubbers;
+  color: @lubbers;
 }
 .ogata {
   fill: @ogata;
+  color: @ogata;
 }
 .stoltenberg {
   fill: @stoltenberg;
+  color: @stoltenberg;
 }
 .hartling {
   fill: @hartling;
+  color: @hartling;
 }
 .khan {
   fill: @khan;
+  color: @khan;
 }
 .schnyder {
   fill: @schnyder;
+  color: @schnyder;
 }
 .lindt {
   fill: @lindt;
+  color: @lindt;
 }
 .Goedhart {
   fill: @Goedhart;
+  color: @Goedhart;
 }
+
 .hocke {
   fill: @hocke;
+  color: @hocke;
 }
 
 .voronoi {

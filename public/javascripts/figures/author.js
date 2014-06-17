@@ -50,16 +50,30 @@ Diction.Figures.Author = Backbone.View.extend({
 
     console.log(x.range());
 
+    var backgroundBars = this.g.selectAll('.word-background-bar').data(this.data);
+    backgroundBars.enter().append('rect')
+
+    backgroundBars.attr('class', function(d, i) {
+        return ['word-background-bar', 'transparent'].join(' ');
+      })
+      .attr('original-title', function(d) {
+        return self.tooltipTemplate.render(d)
+      })
+      .attr('x', function(d, i) { return x(0); })
+      .attr('y', function(d, i) { return y(i); })
+      .attr('width', function(d, i) { return self.width; })
+      .attr('height', (this.height / this.maxBars));
+
     var bars = this.g.selectAll('.word-bar').data(this.data);
     bars.enter().append('rect')
       .attr('x', x(0))
       .attr('width', 0);
 
     bars.attr('class', function(d, i) {
-        return ['word-bar', d.author].join(' ');
-      })
-      .attr('original-title', function(d) {
-        return self.tooltipTemplate.render(d)
+        var author = Diction.authors.get(d.author);
+        if (!author)
+          author = Diction.authors.get('hocké');
+        return ['word-bar', author.cssClass()].join(' ');
       })
       .transition()
       .duration(Diction.Constants.DURATION)
@@ -85,7 +99,7 @@ Diction.Figures.Author = Backbone.View.extend({
         .attr('text-anchor', 'start')
         .attr('dy', '.6em')
         .text(function(d) { return d.raw; });
-    $(this.g.node()).find('.word-bar').tipsy({
+    $(this.g.node()).find('.word-background-bar').tipsy({
       gravity: 's',
       html: true
     });
