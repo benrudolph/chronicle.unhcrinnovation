@@ -2,9 +2,14 @@ Diction.Views.AuthorIndex = Backbone.View.extend({
 
   template: Diction.Templates.authorIndex,
 
-  render: function() {
+  initialize: function() {
     this.$el.html(this.template.render({ collection: this.collection }));
+    this.views = [];
     this.addAll();
+  },
+
+  render: function() {
+    _.each(this.views, function(view) { view.render(); });
 
     return this;
   },
@@ -15,8 +20,9 @@ Diction.Views.AuthorIndex = Backbone.View.extend({
 
   addOne: function(model) {
     view = new Diction.Views.AuthorShow({ model: model });
+    this.views.push(view);
 
-    this.$el.append(view.render().el);
+    this.$el.append(view.el);
   }
 
 });

@@ -9,7 +9,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       height: 440,
       svg: d3.select('#figure'),
       data: [],
-      margin: { top: 10, bottom: 20, left: 50, right: 10 },
+      margin: { top: 10, bottom: 20, left: 50, right: 180 },
       docs: new Diction.Collections.Doc()
     };
 
@@ -21,7 +21,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       this.docHash[doc.get('documentId')] = doc;
     }.bind(this));
 
-    this.width = this.docs.length + this.margin.left + this.margin.right;
+    this.width = this.docs.length;
 
     this.x = d3.scale.ordinal()
       .domain(this.docs.map(function(d, i) { return d.get('documentId'); }))
@@ -36,7 +36,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     this.tippedEl = null;
 
     this.g = this.svg.append('svg')
-      .attr("width", this.width)
+      .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height)
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
@@ -80,6 +80,42 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       }
     }.bind(this));
 
+    // Legend
+
+    var self = this;
+    var legend = this.g.append('g').attr('class', 'legend')
+      .attr('transform', function(d, i) {
+        return 'translate(' + (this.width + 10) + ',10)';
+      }.bind(this));
+
+    var legendRectLength = 10;
+    var legendRectPadding = 2;
+
+    var legendLabels = legend.selectAll('.legend-label').data(Diction.authors.models);
+    legendLabels.enter().append('g');
+    legendLabels
+      .attr('transform', function(d, i) {
+        return 'translate(0,' + i * (legendRectLength + (2 * legendRectPadding)) + ')';
+      })
+      .each(function(d) {
+        var g = d3.select(this);
+        g.append('rect')
+          .attr('class', d.cssClass() + ' legend-rect')
+          .attr('x', 4)
+          .attr('y', 2)
+          .attr('width', legendRectLength)
+          .attr('height', legendRectLength);
+
+        g.append('text')
+          .attr('x', legendRectLength + (4 * legendRectPadding))
+          .attr('y', legendRectLength)
+          .attr('class', 'svg-label')
+          .text(d.get('fullname'));
+
+
+      });
+
+
   },
 
   render: function() {
@@ -110,7 +146,8 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       .attr('height', 0);
     bars
       .attr('class', function(d, i) {
-        return ['bar', d.documentId, docHash[d.documentId].get('author')].join(' ');
+        var author = Diction.authors.get(docHash[d.documentId].get('author'));
+        return ['bar', d.documentId, author.cssClass()].join(' ');
       })
       .attr('original-title', function(d) {
         return self.tooltipTemplate.render(_.extend(d, docHash[d.documentId].toJSON()));
@@ -150,6 +187,8 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       .transition()
       .duration(Diction.Constants.DURATION)
       .call(this.yAxis);
+
+
 
     $('.bar').tipsy({
       html: true,

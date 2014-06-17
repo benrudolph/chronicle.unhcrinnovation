@@ -25,7 +25,7 @@ block content
         label(for="search")
           != 'Search a word:&nbsp;'
         input(type="text", id="words-per-year-search", placeholder="")
-        span(class="current-word")
+        span(class="error-message")
       div(class="col-md-10 col-md-offset-1")
         div(id="words-per-year")
 
@@ -38,14 +38,16 @@ block content
     div(class="row", id="author-popular-words-container", class="module")
       div(class="col-md-12 module-header")
         h1 Who says what
-      div(id="author-popular-words")
+      div(class="col-md-10 col-md-offset-1")
+        div(id="author-popular-words")
 
 block scripts
   script.
     $(document).ready(function() {
       _.templateSettings.variable = "context";
 
-      var animated = {};
+      var animated = {},
+          wordsAdded = [];
       var $headerWrapper,
           $contentWrapper;
 
@@ -116,7 +118,18 @@ block scripts
 
       $('#words-per-year-search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {
-          var query = $(e.currentTarget).val()
+          var $target = $(e.currentTarget)
+          var query = $target.val().toLowerCase();
+
+          // Already been added
+          if (wordsAdded.indexOf(query) !== -1 || Diction.Constants.DEFAULT_WORDS.indexOf(query) !== -1) {
+            $('.error-message').text('Word has already been added');
+            $target.val('');
+            return;
+          }
+
+
+
           $wordsPerYear = $('#words-per-year');
           $wordsPerYear.prepend(Diction.Templates.wordsPerYear.render({ word: query }));
           $.get('/words_per_year', { query: query }).success(function(rows) {
@@ -126,6 +139,9 @@ block scripts
               word: query
             });
             wordsPerYear.render();
+            wordsAdded.push(query);
+            $target.val('');
+            $('.error-message').text('');
           });
         }
 

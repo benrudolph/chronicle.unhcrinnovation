@@ -8,7 +8,7 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
       width: 300,
       svg: d3.select('#word-count'),
       data: [],
-      margin: { top: 10, bottom: 50, left: 50, right: 30 },
+      margin: { top: 10, bottom: 50, left: 25, right: 30 },
       word: null,
     };
 
@@ -86,6 +86,22 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
     this.g.append('g')
       .attr('class', 'y axis')
       .call(this.yAxis);
+
+    var authorData = _.sortBy(Diction.authors.models, function(d) { return -d.get('hc'); });
+
+    var authors = this.g.selectAll('.author-rect').data(authorData);
+    authors.enter().append('rect');
+    authors.attr('class', function (d) {
+        return ['author-rect', d.cssClass()].join(' ');
+      })
+      .attr('x', function(d) { return 0; }.bind(this))
+      .attr('width', function(d) {
+        var endDate = new Date(d.get('endYear') || 2014, 1);
+        return this.x(endDate);
+      }.bind(this))
+      .attr('y', this.height - 3)
+      .attr('height', 3);
+
   },
 
   render: function() {
@@ -134,7 +150,27 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
         $el = $('.words-per-year-' + self.word + ' .word-circle.' + d.point.year);
         $el.tipsy('show');
         self.tippedEl = $el[0];
+
+        d = self.tippedEl.__data__;
+
+        var crosshair = self.g.selectAll('.crosshair').data([d]);
+        var authorData = _.sortBy(Diction.authors.models, function(d) { return d.get('hc'); });
+        var author = _.find(authorData, function(author) {
+          return author.get('endYear') > d.year;
+        });
+
+        if (!author)
+          author = _.last(authorData);
+
+        crosshair.enter().append('line');
+        crosshair
+          .attr('class', 'crosshair ' + author.cssClass())
+          .attr('x1', self.x(new Date(d.year, 1)))
+          .attr('x2', self.x(new Date(d.year, 1)))
+          .attr('y1', self.y(d.perXWords))
+          .attr('y2', self.y(0));
       });
+
 
     $('.word-circle').tipsy({
       html: true,

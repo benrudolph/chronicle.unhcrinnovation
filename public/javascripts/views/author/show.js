@@ -4,8 +4,11 @@ Diction.Views.AuthorShow = Backbone.View.extend({
 
   template: Diction.Templates.authorShow,
 
-  render: function() {
+  initialize: function() {
     this.$el.html(this.template.render({ model: this.model.toJSON() }));
+  },
+
+  render: function() {
     this.drawFigures();
 
     return this;

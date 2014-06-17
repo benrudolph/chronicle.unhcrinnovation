@@ -16,9 +16,11 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
     this.timeline = new Diction.Figures.Timeline({
       docs: Diction.docs
     });
+    this.authorView = new Diction.Views.AuthorIndex({ collection: Diction.authors });
 
-    this.words = ['camps', 'Syria', 'innovation', 'Germany', 'urban', 'education',
-      'sudan', 'peace', 'lebanon'];
+    $('#author-popular-words').html(this.authorView.el);
+
+    this.words = Diction.Constants.DEFAULT_WORDS;
     $wordsPerYear = $('#words-per-year');
     this.wordsPerYear = {};
 
@@ -63,14 +65,12 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
     _.each(this.words, function(word, i) {
       window.setTimeout(this.wordsPerYear[word].render.bind(this.wordsPerYear[word]), i * 300);
     }.bind(this));
+
     $('#words-per-year-container #search').val('');
   },
 
   authorsRoute: function() {
-    this.authorView = new Diction.Views.AuthorIndex({ collection: Diction.authors });
-
-    $('#author-popular-words').html(this.authorView.render().el);
-
+    this.authorView.render();
   },
 
   timelineRoute: function() {

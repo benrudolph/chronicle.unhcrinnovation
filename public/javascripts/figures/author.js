@@ -1,16 +1,18 @@
 Diction.Figures.Author = Backbone.View.extend({
+  tooltipTemplate: Diction.Templates.authorTooltip,
+
   initialize: function(attrs) {
     var defaults = {
-      height: 200,
+      height: 140,
       width: 190,
       data: [],
-      margin: { top: 10, bottom: 10, left: 10, right: 100 },
+      margin: { top: 10, bottom: 10, left: 0, right: 100 },
       author: new Diction.Models.Author()
     };
 
     _.defaults(this, attrs, defaults);
 
-    this.barPadding = 5;
+    this.barPadding = 6;
 
 
     this.g = this.svg.append('svg')
@@ -56,6 +58,9 @@ Diction.Figures.Author = Backbone.View.extend({
     bars.attr('class', function(d, i) {
         return ['word-bar', d.author].join(' ');
       })
+      .attr('original-title', function(d) {
+        return self.tooltipTemplate.render(d)
+      })
       .transition()
       .duration(Diction.Constants.DURATION)
         .delay(function(d, i) { return i * 2; })
@@ -78,8 +83,12 @@ Diction.Figures.Author = Backbone.View.extend({
         .attr('x', function(d, i) { return x(+d.wordCount) + 4; })
         .attr('y', function(d, i) { return y(i); })
         .attr('text-anchor', 'start')
-        .attr('dy', '.9em')
+        .attr('dy', '.6em')
         .text(function(d) { return d.raw; });
+    $(this.g.node()).find('.word-bar').tipsy({
+      gravity: 's',
+      html: true
+    });
 
   },
 });

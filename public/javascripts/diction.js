@@ -2,7 +2,9 @@ var Diction = {
   Constants: {
     ENTER: 13,
     DURATION: 1000,
-    DEFAULT_QUERY: 'refugee'
+    DEFAULT_QUERY: 'refugee',
+    DEFAULT_WORDS: ['camps', 'syria', 'innovation', 'germany', 'urban', 'education',
+      'sudan', 'peace', 'lebanon']
   },
   Figures: {},
   Routers: {},
@@ -16,7 +18,8 @@ var Diction = {
     wordsPerYear: new EJS({ url: '/templates/words_per_year.html.ejs'}),
     wordsPerYearTooltip: new EJS({ url: '/templates/words_per_year_tooltip.html.ejs'}),
     authorIndex: new EJS({ url: '/templates/author/index.html.ejs' }),
-    authorShow: new EJS({ url: '/templates/author/show.html.ejs' })
+    authorShow: new EJS({ url: '/templates/author/show.html.ejs' }),
+    authorTooltip: new EJS({ url: '/templates/author/tooltip.html.ejs' })
   },
 };
 
