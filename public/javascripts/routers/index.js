@@ -5,6 +5,7 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
   initialize: function(options) {
     Diction.docs = new Diction.Collections.Doc(options.docs);
     Diction.authors = new Diction.Collections.Author(options.authors);
+    Diction.popularWords = _.groupBy(options.popularWords, 'author');
 
     this.loaded = false;
     this.renderAttempted = false;
@@ -21,7 +22,7 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
     $wordsPerYear = $('#words-per-year');
     this.wordsPerYear = {};
 
-    var count = 0
+    var count = 0;
     _.each(this.words, function(word) {
       $wordsPerYear.append(this.wordsPerYearTemplate.render({ word: word }));
 
@@ -51,6 +52,7 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
     'timelineRoute': 'timelineRoute',
     'wordsPerYearRoute': 'wordsPerYearRoute',
     'wordsPerYearRoute/:word': 'wordsPerYearRoute',
+    'authorsRoute': 'authorsRoute'
   },
 
   wordsPerYearRoute: function() {
@@ -61,6 +63,14 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
     _.each(this.words, function(word, i) {
       window.setTimeout(this.wordsPerYear[word].render.bind(this.wordsPerYear[word]), i * 300);
     }.bind(this));
+    $('#words-per-year-container #search').val('');
+  },
+
+  authorsRoute: function() {
+    this.authorView = new Diction.Views.AuthorIndex({ collection: Diction.authors });
+
+    $('#author-popular-words').html(this.authorView.render().el);
+
   },
 
   timelineRoute: function() {
@@ -74,6 +84,10 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
     NProgress.start();
     $.get('/search', { query: query }, function(response) {
       this.freqChart.dataFn(response).render();
+
+      var sum = _.reduce(response, function(memo, d) { return memo + d.count; }, 0);
+      $('#figure-container .current-word').text(query + ': ' + Diction.Formats.COMMA(sum) + ' occurences');
+      $('#figure-container #search').val('');
       NProgress.done();
     }.bind(this));
   },

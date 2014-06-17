@@ -1,6 +1,11 @@
 @black: rgb(30, 30, 30);
 @navy: #0B1822;
+@gray: rgb(200,200,200);
+@dark-gray: rgb(80,80,80);
+@light-gray: rgb(240,240,240);
 @selection: rgb(252, 239, 23);
+@background-blue: #4eaacc;
+@border-blue: #3491b3;
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   color: @black;
@@ -27,24 +32,77 @@ a:hover {
   color: @navy;
 }
 
+.author {
+  width: 300px;
+  height: 300px;
+  display: inline-block;
+  margin: 15px;
+  border: 1px @gray solid;
+
+  .header {
+    height: 60px;
+    border-bottom: 1px @gray solid;
+    background-color: @light-gray;
+  }
+}
+
 .content-wrapper {
   position: relative;
   margin-top: -40px;
-  padding: 0 50px;
   background-color: white;
 }
 
 .module {
   text-align: center;
   min-height: 600px;
+  margin-bottom: 20px;
+
+  .module-header {
+    text-align: left;
+    background-color: @background-blue;
+    border: 1px solid @border-blue;
+    min-height: 200px;
+    color: white;
+    padding: 0px 60px;
+    margin-bottom: 20px;
+  }
 }
 
 #words-per-year {
   text-align: left;
 }
 
+#author-popular-words {
+  text-align: left;
+}
+
 #figure {
   margin-top: 100px;
+
+}
+
+.svg-label {
+  font-size: 12px;
+  fill: @dark-gray;
+}
+
+.avg-line {
+  stroke-dasharray: 5, 5;
+  fill: black;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+.current-word {
+  margin-left: 30px
+}
+
+.search-container {
+  text-align: left;
 }
 
 .words-per-year-container {
@@ -68,7 +126,7 @@ a:hover {
   shape-rendering: crispEdges;
 }
 
-.svg-words-per-year {
+.svg-words-per-year .word-line {
   fill: none;
   stroke: black;
 }
@@ -87,10 +145,13 @@ input {
 
 .axis text {
   font: 10px sans-serif;
+  stroke: none;
+  fill: @black;
 }
 
 .word-circle {
   stroke: none;
+  fill: none;
 }
 
 line {

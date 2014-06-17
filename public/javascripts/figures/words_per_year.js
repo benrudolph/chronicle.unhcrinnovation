@@ -44,6 +44,17 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
       }))
       .range([0, this.width]);
 
+    this.xAxis = d3.svg.axis()
+      .scale(this.x)
+      .orient("bottom")
+      .tickValues([new Date(1951, 1), new Date(1980, 1), new Date(2014, 1)])
+      .tickFormat(function(d) { return d.getFullYear() });
+
+    this.yAxis = d3.svg.axis()
+      .scale(this.y)
+      .ticks(4)
+      .orient('left');
+
     this.lineFn = d3.svg.line()
       .interpolate('cardinal')
       .x(function(d) { return this.x(new Date(d.year, 1)); }.bind(this))
@@ -66,6 +77,15 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
         this.tippedEl = null;
       }
     }.bind(this));
+
+    this.g.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0, ' + this.height + ')')
+      .call(this.xAxis);
+
+    this.g.append('g')
+      .attr('class', 'y axis')
+      .call(this.yAxis);
   },
 
   render: function() {

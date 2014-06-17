@@ -131,7 +131,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       $el.tipsy('show');
 
       // Overrive pointer-events in style sheet
-      $('.tipsy').css('pointer-events', 'auto');
+      $('.tipsy').addClass('clickable');
 
       // Show sentences on tooltip click
       $('.tipsy-show a').on('click', function() { self.onShowSentences(d, $el) }.bind(self));

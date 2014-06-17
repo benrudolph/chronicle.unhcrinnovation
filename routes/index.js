@@ -2,6 +2,7 @@ var constants = require('../lib/constants');
 var natural = require('natural');
 var db = require('../models');
 var queries = require('../queries/queries');
+var popularWords = require('../data/popular_words').words;
 /*
  * GET home page.
  */
@@ -12,14 +13,16 @@ exports.index = function(req, res){
     db.Author.findAll().success(function(authors) {
       res.render('index', {
         data: JSON.stringify(db.Doc.publicModels(docs)),
-        authors: JSON.stringify(authors)
+        authors: JSON.stringify(authors),
+        popularWords: JSON.stringify(popularWords)
       });
     });
   });
 
 };
 
-exports.wordCounts = function(req, res) {
+exports.popularWordsByAuthor = function(req, res) {
+  res.json(200, popularWords);
 };
 
 exports.search = function(req, res) {

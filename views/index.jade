@@ -1,40 +1,44 @@
 extends layout
 
 block content
-  header(data-0="-webkit-transform: translate3d(-0px, 0px, 0px); transition: 0s; -webkit-transition: 0s;", data-500="-webkit-transform: translate3d(0p, -1000px, 0px); transition: 0s; -webkit-transition: 0s;")
+  header()
     div(class="header-wrapper")
       div(class="col-md-12 text-center")
         h1 UNITED NATIONS
 
   div(class="content-wrapper")
     div(class="row", id="figure-container", class="module")
+      div(class="module-header col-md-12")
+        h1 Words in Document
       div(id="figure")
-      div(class="col-md-12")
+      div(class="col-md-6 col-md-offset-4 search-container")
         label(for="search")
           != 'Search a word:&nbsp;'
         input(type="text", id="search", placeholder="")
+        span(class="current-word")
 
+
+    div(class="row", id="words-per-year-container", class="module")
+      div(class="module-header col-md-12")
+        h1 Words over time
+      div(class="col-md-6 col-md-offset-4 search-container")
+        label(for="search")
+          != 'Search a word:&nbsp;'
+        input(type="text", id="words-per-year-search", placeholder="")
+        span(class="current-word")
+      div(class="col-md-10 col-md-offset-1")
+        div(id="words-per-year")
 
     div(class="row", id="timeline-container", class="module")
-      div(class="col-md-12")
+      div(class="col-md-12 module-header")
         h1 Sentiment Analysis over time
       div(class="col-md-12")
         div(id="timeline")
 
-    div(class="row", id="words-per-year-container", class="module")
-      div(class="col-md-12")
-        h1 Words over time
-      div(class="col-md-12")
-        div(class="well")
-          label(for="search")
-            != 'Search a word:&nbsp;'
-          input(type="text", id="words-per-year-search", placeholder="")
-      div(class="col-md-12")
-        div(id="words-per-year")
-
-    div(class="row", id="author-top-words-container", class="module")
-      div(class="col-md-12")
+    div(class="row", id="author-popular-words-container", class="module")
+      div(class="col-md-12 module-header")
         h1 Who says what
+      div(id="author-popular-words")
 
 block scripts
   script.
@@ -61,44 +65,46 @@ block scripts
 
       $(document).on('scroll', function(e) {
         var fn = _.throttle(function() {
-            $.publish('scroll');
             var scrollTop = $(window).scrollTop()
-            $contentWrapper.css({
-              '-webkit-transform': 'translate3d(-0px, ' + -(3 * scrollTop) + 'px, 0px)',
-              '-webkit-transition': '.2s',
-              '-moz-transform': 'translate3d(-0px, ' + -(3 * scrollTop) + 'px, 0px)',
-              '-moz-transition': '.2s',
-              'transition': '.2s'
-            })
+            //$contentWrapper.css({
+            //  '-webkit-transform': 'translate3d(-0px, ' + -(3 * scrollTop) + 'px, 0px)',
+            //  '-webkit-transition': '.2s',
+            //  '-moz-transform': 'translate3d(-0px, ' + -(3 * scrollTop) + 'px, 0px)',
+            //  '-moz-transition': '.2s',
+            //  'transition': '.2s'
+            //})
 
             var freqChartOffset = Diction.skrollr.relativeToAbsolute($('#figure-container')[0], 'bottom',
             'bottom')
 
-            if (window.scrollY > freqChartOffset && !animated['freqChart']) {
-              Diction.router.navigate('/freqchartRoute', { trigger: true });
-              animated['freqChart'] = true;
-            }
-
             var timelineOffset = Diction.skrollr.relativeToAbsolute($('#timeline-container #timeline')[0], 'bottom',
             'bottom')
-
-            if (window.scrollY > timelineOffset && !animated['timeline']) {
-              Diction.router.navigate('/timelineRoute', { trigger: true });
-              animated['timeline'] = true;
-            }
 
             var wordsPerYearOffset = Diction.skrollr.relativeToAbsolute($('#words-per-year-container .words-per-year-container:first')[0],
             'bottom', 'bottom')
 
-            if (window.scrollY > wordsPerYearOffset && !animated['wordsPerYear']) {
-              Diction.router.navigate('/wordsPerYearRoute', { trigger: true });
-              animated['wordsPerYear'] = true;
-            }
 
+            var popularWordsOffset = Diction.skrollr.relativeToAbsolute($('#author-popular-words')[0], 'top',
+              'top')
+
+            animate(freqChartOffset, 'freqchartRoute');
+            animate(timelineOffset, 'timelineRoute');
+            animate(wordsPerYearOffset, 'wordsPerYearRoute');
+            animate(popularWordsOffset, 'authorsRoute');
+
+            //$.publish('scroll');
           }, 100);
         fn();
 
       });
+
+      function animate(offset, route) {
+          if (window.scrollY > offset && !animated[route]) {
+            Diction.router[route]()
+            animated[route] = true;
+          }
+
+      }
 
       $('#search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {
@@ -128,6 +134,7 @@ block scripts
       Diction.router = new Diction.Routers.IndexRouter({
         docs: !{data},
         authors: !{authors},
+        popularWords: !{popularWords}
       });
       Backbone.history.start();
 

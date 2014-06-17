@@ -30,7 +30,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/search', routes.search);
-app.get('/word_counts', routes.wordCounts);
+app.get('/popular_words', routes.popularWordsByAuthor);
 app.get('/sentences', routes.sentences);
 app.get('/words_per_year', routes.wordsPerYear);
 

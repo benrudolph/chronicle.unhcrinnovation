@@ -1,0 +1,18 @@
+<div class="header">
+  <div class="row">
+    <div class="col-md-7">
+      <div class="author-name">
+        <a target="_blank" href="<%= model.url %>"><%= model.fullname %></a>
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <div class="author-term">
+        <%= model.startYear %> - <%= model.endYear || 'present' %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="author-body">
+  <div class="author-figure"></div>
+</div>
