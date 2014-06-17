@@ -249,7 +249,7 @@ input {
 
 .word-circle {
   stroke: none;
-  fill: none;
+  fill: transparent;
 }
 
 line {
@@ -342,5 +342,35 @@ line.hocke {
 .voronoi {
   fill: transparent;
   stroke: none;
+}
+
+.dot-navigation {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  margin-top: -60px;
+  height: 140px;
+  z-index: 100;
+
+  .dot {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border: 1px solid @black;
+    background-color: @light-gray;
+    margin: 14px auto;
+    cursor: pointer;
+  }
+
+  .dot:hover {
+    background-color: @gray;
+  }
+
+  .dot.selected {
+    background-color: @black;
+  }
 }
 

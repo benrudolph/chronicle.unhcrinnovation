@@ -1,7 +1,13 @@
 extends layout
 
 block content
-  header()
+  div(class="dot-navigation")
+    a(href="/#figure-container", id="figure-container-nav", class="dot")
+    a(href="/#words-per-year-container", id="words-per-year-container-nav", class="dot")
+    a(href="/#timeline-container", id="timeline-container-nav", class="dot")
+    a(href="/#author-popular-words-container", id="author-popular-words-container-nav", class="dot")
+
+  header
     div(class="header-wrapper")
       div(class="col-md-12 text-center")
         h1 UNITED NATIONS
@@ -90,7 +96,7 @@ block scripts
             //  'transition': '.2s'
             //})
 
-            var freqChartOffset = Diction.skrollr.relativeToAbsolute($('#figure-container')[0], 'bottom',
+            var freqChartOffset = Diction.skrollr.relativeToAbsolute($('#figure-container #figure')[0], 'bottom',
             'bottom')
 
             var timelineOffset = Diction.skrollr.relativeToAbsolute($('#timeline-container #timeline')[0], 'bottom',
@@ -121,6 +127,20 @@ block scripts
           }
 
       }
+
+      var $modules = $('.module');
+
+      $modules.on('scrollSpy:enter', function() {
+          var id = $(this).attr('id');
+          $('#' + id + '-nav').addClass('selected');
+      });
+
+      $modules.on('scrollSpy:exit', function() {
+          var id = $(this).attr('id');
+          $('#' + id + '-nav').removeClass('selected');
+      });
+
+      $modules.scrollSpy();
 
       $('#search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {
