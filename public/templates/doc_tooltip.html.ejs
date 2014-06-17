@@ -11,7 +11,7 @@
   Word Count: <%= wordCount %>
 </p>
 <p class="tipsy-author">
-  -&nbsp;<%= Diction.Authors[author] %>
+  -&nbsp;<%= Diction.authors.get(author).get('fullname') %>
 </p>
 
 

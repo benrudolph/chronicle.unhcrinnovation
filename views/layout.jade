@@ -9,6 +9,8 @@ html
   body
     div(class="container-fluid-fluid")
       block content
+
+    // libs
     script(src='/javascripts/jquery.min.js')
     script(src='/javascripts/jquery.tipsy.js')
     script(src='/javascripts/d3.js')
@@ -18,11 +20,21 @@ html
     script(src='/javascripts/skrollr.js')
     script(src='/javascripts/pubsub.js')
     script(src='/javascripts/nprogress.js')
+
+    // main
     script(src='/javascripts/diction.js')
+
+    // models and collections
     script(src='/javascripts/models/author.js')
     script(src='/javascripts/models/doc.js')
+    script(src='/javascripts/collections/author.js')
+    script(src='/javascripts/models/author.js')
     script(src='/javascripts/collections/doc.js')
+
+    // routers
     script(src='/javascripts/routers/index.js')
+
+    // figures
     script(src='/javascripts/figures/freq_chart.js')
     script(src='/javascripts/figures/timeline.js')
     script(src='/javascripts/figures/words_per_year.js')

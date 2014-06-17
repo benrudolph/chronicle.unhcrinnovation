@@ -9,7 +9,12 @@ var queries = require('../queries/queries');
 
 exports.index = function(req, res){
   db.Doc.findAll().success(function(docs) {
-    res.render('index', { data: JSON.stringify(db.Doc.publicModels(docs)) });
+    db.Author.findAll().success(function(authors) {
+      res.render('index', {
+        data: JSON.stringify(db.Doc.publicModels(docs)),
+        authors: JSON.stringify(authors)
+      });
+    });
   });
 
 };

@@ -8,7 +8,7 @@
   Count: <%= count %>
 </p>
 <p class="tipsy-author">
-  -&nbsp;<%= Diction.Authors[author] %>
+  -&nbsp;<%= Diction.authors.get(author).get('fullname') %>
 </p>
 <p class="tipsy-show">
   <a>Show Sentences</a>

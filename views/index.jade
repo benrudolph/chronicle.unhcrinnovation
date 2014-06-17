@@ -6,7 +6,7 @@ block content
       div(class="col-md-12 text-center")
         h1 UNITED NATIONS
 
-  div(class="content-wrapper", data-0="-webkit-transform: translate3d(-0px, 0px, 0px); transition: 0s; -webkit-transition: 0s;", data-500="-webkit-transform: translate3d(0p, -1800px, 0px); transition: 0s; -webkit-transition: 0s;")
+  div(class="content-wrapper")
     div(class="row", id="figure-container", class="module")
       div(id="figure")
       div(class="col-md-12")
@@ -42,6 +42,10 @@ block scripts
       _.templateSettings.variable = "context";
 
       var animated = {};
+      var $headerWrapper,
+          $contentWrapper;
+
+      $contentWrapper = $('.content-wrapper');
 
       $headerWrapper = $('.header-wrapper');
       $headerWrapper.css('width', $(window).width());
@@ -58,6 +62,14 @@ block scripts
       $(document).on('scroll', function(e) {
         var fn = _.throttle(function() {
             $.publish('scroll');
+            var scrollTop = $(window).scrollTop()
+            $contentWrapper.css({
+              '-webkit-transform': 'translate3d(-0px, ' + -(3 * scrollTop) + 'px, 0px)',
+              '-webkit-transition': '.2s',
+              '-moz-transform': 'translate3d(-0px, ' + -(3 * scrollTop) + 'px, 0px)',
+              '-moz-transition': '.2s',
+              'transition': '.2s'
+            })
 
             var freqChartOffset = Diction.skrollr.relativeToAbsolute($('#figure-container')[0], 'bottom',
             'bottom')
@@ -114,7 +126,8 @@ block scripts
       });
 
       Diction.router = new Diction.Routers.IndexRouter({
-        docs: !{data}
+        docs: !{data},
+        authors: !{authors},
       });
       Backbone.history.start();
 
