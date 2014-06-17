@@ -56,7 +56,7 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
       .orient('left');
 
     this.lineFn = d3.svg.line()
-      .interpolate('cardinal')
+      .interpolate('monotone')
       .x(function(d) { return this.x(new Date(d.year, 1)); }.bind(this))
       .y(function(d) { return this.y(d.perXWords); }.bind(this));
 

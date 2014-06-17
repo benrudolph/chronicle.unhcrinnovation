@@ -94,14 +94,14 @@ block scripts
             'bottom')
 
             var timelineOffset = Diction.skrollr.relativeToAbsolute($('#timeline-container #timeline')[0], 'bottom',
-            'bottom')
+            'center')
 
             var wordsPerYearOffset = Diction.skrollr.relativeToAbsolute($('#words-per-year-container .words-per-year-container:first')[0],
-            'bottom', 'bottom')
+            'bottom', 'center')
 
 
-            var popularWordsOffset = Diction.skrollr.relativeToAbsolute($('#author-popular-words')[0], 'top',
-              'top')
+            var popularWordsOffset = Diction.skrollr.relativeToAbsolute($('#author-popular-words .author:first')[0], 'bottom',
+              'center')
 
             animate(freqChartOffset, 'freqchartRoute');
             animate(timelineOffset, 'timelineRoute');
@@ -125,7 +125,7 @@ block scripts
       $('#search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {
           var query = $(e.currentTarget).val()
-          Diction.router.navigate('/freqchartRoute/' + query, { trigger: true });
+          Diction.router.freqchartRoute(query);
         }
 
       });

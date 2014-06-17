@@ -92,6 +92,22 @@ Diction.Figures.Timeline = Backbone.View.extend({
       .attr('class', 'x axis')
       .call(this.xAxis);
 
+    var authorData = _.sortBy(Diction.authors.models, function(d) { return -d.get('hc'); });
+
+    var authors = this.g.selectAll('.author-rect').data(authorData);
+    authors.enter().append('rect');
+    authors.attr('class', function (d) {
+        return ['author-rect', d.cssClass()].join(' ');
+      })
+      .attr('x', function(d) { return 0; }.bind(this))
+      .attr('width', function(d) {
+        var endDate = new Date(d.get('endYear') || 2014, 1);
+        return this.x(endDate);
+      }.bind(this))
+      .attr('y', 0)
+      .attr('height', 3);
+
+
   },
 
   render: function() {
@@ -181,8 +197,10 @@ Diction.Figures.Timeline = Backbone.View.extend({
   brushed: function(d) {
     var self = this;
     var extent = this.brush.extent();
+    var removeLabels = false
     if (+extent[0] === +extent[1]) {
       extent = this.x.domain();
+      removeLabels = true;
     }
     var docCount = 0;
     var avg = _.reduce(this.docs.models, function(memo, doc) {
@@ -200,6 +218,11 @@ Diction.Figures.Timeline = Backbone.View.extend({
     avgLine
       .attr('y1', function(d) { return this.y(d); }.bind(this))
       .attr('y2', function(d) { return this.y(d); }.bind(this));
+
+    if (removeLabels) {
+      this.g.selectAll('.brush-label, .diff-label').remove();
+      return;
+    }
 
     var avgLabel = this.g.selectAll('.avg-label').data([avg]);
     avgLabel
@@ -225,10 +248,10 @@ Diction.Figures.Timeline = Backbone.View.extend({
       .attr('class', 'diff-label svg-label')
       .attr('text-anchor', function(d, i) { return 'middle' })
       .text(function(d) {
-        // seconds
         var value,
             months,
             years;
+        // seconds
         value = d / 1000;
 
         // minutes

@@ -50,7 +50,6 @@ Diction.Routers.IndexRouter = Backbone.Router.extend({
 
   routes: {
     'freqchartRoute': 'freqchartRoute',
-    'freqchartRoute/:word': 'freqchartRoute',
     'timelineRoute': 'timelineRoute',
     'wordsPerYearRoute': 'wordsPerYearRoute',
     'wordsPerYearRoute/:word': 'wordsPerYearRoute',
