@@ -1,5 +1,11 @@
 var cluster = require('cluster');
 var nap = require('nap');
+var nodemailer = require('nodemailer');
+var fs = require('fs');
+// email config
+var emailConfig,
+    smtpTransport;
+
 
 if (cluster.isMaster) {
 
@@ -10,6 +16,10 @@ if (cluster.isMaster) {
       cluster.fork();
   }
 
+  cluster.on('disconnect', function(worker) {
+    console.error('disconnect!');
+    cluster.fork();
+  });
 
 } else {
 
@@ -23,36 +33,15 @@ if (cluster.isMaster) {
   var path = require('path');
   var db = require('./models');
   var less = require('less');
-  var nodemailer = require('nodemailer');
-  var fs = require('fs');
+  var domain = require('domain');
 
   var app = express();
 
 
-  // email config
-  var emailConfig = (JSON.parse(fs.readFileSync("config/email.json", "utf8")))[app.get('env') || 'development'];
 
-  var smtpTransport = nodemailer.createTransport("SMTP", emailConfig);
+  emailConfig = (JSON.parse(fs.readFileSync("config/email.json", "utf8")))[app.get('env') || 'development'];
 
-  var mailOptions = {
-    from: "Ben Rudolph <rudolphben@gmail.com>", // sender address
-    to: "rudolph@unhcr.org", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world ✔", // plaintext body
-    html: "<b>Hello world ✔</b>" // html body
-  };
-
-  //// send mail with defined transport object
-  //smtpTransport.sendMail(mailOptions, function(error, response){
-  //    if(error){
-  //        console.log(error);
-  //    }else{
-  //        console.log("Message sent: " + response.message);
-  //    }
-
-  //    // if you don't want to use this transport object anymore, uncomment following line
-  //    //smtpTransport.close(); // shut down the connection pool, no more messages
-  //});
+  smtpTransport = nodemailer.createTransport("SMTP", emailConfig);
 
 
 
@@ -112,6 +101,7 @@ if (cluster.isMaster) {
   app.use(app.router);
   app.use(require('less-middleware')(path.join(__dirname, 'public')));
   app.use(express.static(path.join(__dirname, 'public')));
+  app.use(emailErrors);
 
   // development only
   if ('development' == app.get('env')) {
@@ -135,4 +125,27 @@ if (cluster.isMaster) {
       });
     });
   }
+}
+
+function emailErrors(err, req, res, next) {
+  console.error(err.stack);
+  var mailOptions = {
+    from: "Ben Rudolph <rudolphben@gmail.com>", // sender address
+    to: "rudolph@unhcr.org", // list of receivers
+    subject: "Error in UNHCR Discourse", // Subject line
+    text: err.stack, // plaintext body
+  };
+  // send mail with defined transport object
+  smtpTransport.sendMail(mailOptions, function(error, response){
+    if (error){
+      console.log(error);
+    }else{
+      console.log("Message sent: " + response.message);
+    }
+    // if you don't want to use this transport object anymore, uncomment following line
+    //smtpTransport.close(); // shut down the connection pool, no more messages
+  });
+
+
+  next(err);
 }
