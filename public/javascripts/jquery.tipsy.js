@@ -37,7 +37,6 @@
                     width: this.$element[0].offsetWidth || 0,
                     height: this.$element[0].offsetHeight || 0
                 });
-                console.log(this.$element.offset())
 
                 var actualWidth = $tip[0].offsetWidth || 0,
                     actualHeight = $tip[0].offsetHeight || 0,

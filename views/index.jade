@@ -2,7 +2,7 @@ extends layout
 
 block content
   div(class="dot-navigation")
-    a(href="/#figure-container", id="figure-container-nav", class="dot")
+    a(href="/#figure-container", id="figure-container-nav", class="dot selected")
     a(href="/#words-per-year-container", id="words-per-year-container-nav", class="dot")
     a(href="/#timeline-container", id="timeline-container-nav", class="dot")
     a(href="/#author-popular-words-container", id="author-popular-words-container-nav", class="dot")
@@ -89,6 +89,8 @@ block scripts
           }, 100);
         fn();
       })
+      var $modules = $('.module');
+      var $reversed = $modules.get().reverse()
 
       $(document).on('scroll', function(e) {
         var fn = _.throttle(function() {
@@ -114,6 +116,17 @@ block scripts
             var popularWordsOffset = Diction.skrollr.relativeToAbsolute($('#author-popular-words .author:first')[0], 'bottom',
               'center')
 
+            for (var i = 0; i < $reversed.length; i ++) {
+              var offset = Diction.skrollr.relativeToAbsolute($reversed[i], 'top', 'top');
+              if (scrollTop > offset) {
+                var id = $($reversed[i]).attr('id');
+                $('.dot').removeClass('selected');
+                $('#' + id + '-nav').addClass('selected');
+                break;
+              }
+            }
+
+
             animate(freqChartOffset, 'freqchartRoute');
             animate(timelineOffset, 'timelineRoute');
             animate(wordsPerYearOffset, 'wordsPerYearRoute');
@@ -132,30 +145,6 @@ block scripts
           }
 
       }
-
-      var $modules = $('.module');
-
-      $modules.on('scrollSpy:enter', function() {
-          var id = $(this).attr('id');
-          $('#' + id + '-nav').addClass('selected');
-          console.log('enter')
-      });
-
-      $modules.on('scrollSpy:exit', function() {
-          var id = $(this).attr('id');
-          $('#' + id + '-nav').removeClass('selected');
-          console.log('exit')
-      });
-
-      $modules.scrollSpy();
-
-      $('#search').on('keyup', function(e) {
-        if (e.keyCode == Diction.Constants.ENTER) {
-          var query = $(e.currentTarget).val()
-          Diction.router.freqchartRoute(query);
-        }
-
-      });
 
       $('#words-per-year-search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {

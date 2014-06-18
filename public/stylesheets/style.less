@@ -370,6 +370,10 @@ line.hocke {
   z-index: 100;
 
   .dot {
+    -moz-transition:all .5s;
+    -webkit-transition:all .5s;
+    -o-transition:all .5s;
+    transition:all .5s;
     display: block;
     width: 10px;
     height: 10px;
@@ -377,17 +381,17 @@ line.hocke {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border: 1px solid @black;
-    background-color: @light-gray;
+    background: rgba(30, 30, 30, .1);
     margin: 14px auto;
     cursor: pointer;
   }
 
   .dot:hover {
-    background-color: @gray;
+    background: rgba(30, 30, 30, .4);
   }
 
   .dot.selected {
-    background-color: @black;
+    background: rgba(30, 30, 30, .9);
   }
 }
 
