@@ -2,9 +2,33 @@ extends layout
 
 block intro
   div(class="intro-body")
-    h1(class="intro-text intro-speeches", data-0="bottom:-50%",
+    div(data-0="opacity: 1", data-200="opacity: 0")
+      div(class="intro-text intro-logo")
+      div(class="intro-text intro-tagline")
+        h3
+          != 'VISUALIZE. ANALYZE. VALIDATE'
+        h4
+          != 'Connecting Data and Humans.'
+      div(class="intro-text intro-scroll") Scroll
+
+    div(class="intro-fact intro-commissioners", data-0="bottom:-50%",
         data-500="bottom:50%", data-1000="opacity:1", data-1500="opacity:0")
-      != '703'
+      div(class="big-number") 10
+      h1 HIGH COMMISSIONERS
+
+    h2(class="intro-fact intro-years", data-0="bottom: -50%",
+        data-500="bottom: -45%", data-700="bottom: 45%; opacity: 1", data-1500="opacity:0")
+      != '1951 - 2014'
+
+    div(class="intro-fact intro-speeches", data-1500="bottom:-50%",
+        data-2000="bottom:50%", data-2200="opacity:1", data-2500="opacity:0")
+      div(class="huge-number") 703
+      h1 SPEECHES
+
+
+    h1(class="intro-fact intro-words", data-2500="bottom:-50%",
+        data-3000="bottom:50%", data-3200="opacity:1", data-3500="opacity:0") 1,774,931 WORDS
+
 
 block content
   div(class="dot-navigation")
@@ -171,6 +195,13 @@ block scripts
           }
 
       }
+
+      $('#search').on('keyup', function(e) {
+        if (e.keyCode == Diction.Constants.ENTER) {
+          var query = $(e.currentTarget).val()
+          Diction.router.freqchartRoute(query);
+        }
+      });
 
       $('#words-per-year-search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {

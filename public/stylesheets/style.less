@@ -21,6 +21,29 @@
 @Goedhart: #cab2d6;
 @hocke: #6a3d9a;
 
+@-webkit-keyframes 'blink' {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:.3;
+    }
+    100% {
+        opacity:1;
+    }
+}
+@-moz-keyframes 'blink' {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:.3;
+    }
+    100% {
+        opacity:1;
+    }
+}
+
 @font-face {
   font-family: 'Lato';
   font-style: normal;
@@ -78,7 +101,7 @@ a:hover {
 
 .content-wrapper {
   position: relative;
-  margin-top: 1500px;
+  margin-top: 2500px;
   background-color: white;
 }
 
@@ -212,13 +235,87 @@ a:hover {
   background: transparent;
   position: relative;
   z-index: 100;
+  color: white;
 
-  .intro-text {
-    position: fixed;
-    left: 50%;
-    right: 50%;
-    bottom: -50%;
+  h1 {
+    font-weight: 300;
+    margin-top: 4px;
   }
+
+  h3 {
+    font-size: 18px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  h4 {
+    font-size: 16px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  .intro-text, .intro-fact {
+    text-align: center;
+    position: fixed;
+    width: 600px;
+    margin-left: -300px;
+    left: 50%;
+  }
+
+  .intro-fact {
+    font-family: Helvetica Neue, Arial, sans-serif;
+  }
+
+  .intro-logo {
+    top: 45%;
+    margin-top: -90px;
+    margin-left: -90px;
+    width: 180px;
+    height: 180px;
+    border-radius: 100px;
+    background-color: white;
+  }
+
+  .intro-scroll:before {
+    content: ' ';
+    background-repeat: no-repeat;
+    background-image: url('/images/arrow.png');
+    display: inline-block;
+    width: 67px;
+    height: 69px;
+    position: absolute;
+    margin-left: -15px;
+    top: 14px;
+  }
+
+  .big-number {
+    font-size: 60px;
+    line-height: 60px;
+  }
+
+  .huge-number {
+    font-size: 120px;
+    line-height: 100px;
+  }
+
+  .intro-tagline {
+    top: 60%;
+  }
+
+  .intro-scroll {
+    top: 90%;
+    -webkit-animation-direction: normal;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: blink;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-direction: normal;
+    -moz-animation-duration: 3s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-name: blink;
+    -moz-animation-timing-function: ease-in-out;
+  }
+
 
 }
 
@@ -239,6 +336,10 @@ text {
   h1 {
     font-size: 18px;
     margin: 0;
+
+    a {
+      color: @black;
+    }
   }
   h2 {
     font-size: 14px;

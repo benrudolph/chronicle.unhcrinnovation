@@ -12,6 +12,7 @@
     "jade": "*",
     "less-middleware": "*",
     "less": "*",
+    "nodemailer": "*",
     "underscore": "*",
     "nano": "*",
     "natural": "*",
