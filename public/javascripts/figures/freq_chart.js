@@ -9,7 +9,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       height: 440,
       svg: d3.select('#figure'),
       data: [],
-      margin: { top: 10, bottom: 20, left: 50, right: 180 },
+      margin: { top: 10, bottom: 20, left: 50, right: 100 },
       docs: new Diction.Collections.Doc()
     };
 
@@ -94,36 +94,36 @@ Diction.Figures.FreqChart = Backbone.View.extend({
 
     // Legend
 
-    var self = this;
-    var legend = d3.select('#figure-container .legend-container').append('svg').attr('class', 'legend')
-
-    var legendRectLength = 10;
-    var legendRectPadding = 2;
-
-    var legendLabels = legend.selectAll('.legend-label').data(Diction.authors.models);
-    legendLabels.enter().append('g');
-    legendLabels
-      .attr('transform', function(d, i) {
-        return 'translate(0,' + i * (legendRectLength + (2 * legendRectPadding)) + ')';
-      })
-      .each(function(d) {
-        var g = d3.select(this);
-        g.append('rect')
-          .attr('class', d.cssClass() + ' legend-rect')
-          .attr('x', 4)
-          .attr('y', 2)
-          .attr('width', legendRectLength)
-          .attr('height', legendRectLength);
-
-        g.append('text')
-          .attr('x', legendRectLength + (4 * legendRectPadding))
-          .attr('y', legendRectLength)
-          .attr('class', 'svg-label')
-          .text(d.get('fullname'));
-
-
-      });
-
+//    var self = this;
+//    var legend = d3.select('#figure-container .legend-container').append('svg').attr('class', 'legend')
+//
+//    var legendRectLength = 10;
+//    var legendRectPadding = 2;
+//
+//    var legendLabels = legend.selectAll('.legend-label').data(Diction.authors.models);
+//    legendLabels.enter().append('g');
+//    legendLabels
+//      .attr('transform', function(d, i) {
+//        return 'translate(0,' + i * (legendRectLength + (2 * legendRectPadding)) + ')';
+//      })
+//      .each(function(d) {
+//        var g = d3.select(this);
+//        g.append('rect')
+//          .attr('class', d.cssClass() + ' legend-rect')
+//          .attr('x', 4)
+//          .attr('y', 2)
+//          .attr('width', legendRectLength)
+//          .attr('height', legendRectLength);
+//
+//        g.append('text')
+//          .attr('x', legendRectLength + (4 * legendRectPadding))
+//          .attr('y', legendRectLength)
+//          .attr('class', 'svg-label')
+//          .text(d.get('fullname'));
+//
+//
+//      });
+//
 
   },
 

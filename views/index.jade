@@ -1,5 +1,11 @@
 extends layout
 
+block intro
+  div(class="intro-body")
+    h1(class="intro-text intro-speeches", data-0="bottom:-50%",
+        data-500="bottom:50%", data-1000="opacity:1", data-1500="opacity:0")
+      != '703'
+
 block content
   div(class="dot-navigation")
     a(href="/#figure-container", id="figure-container-nav", class="dot selected")
@@ -7,12 +13,14 @@ block content
     a(href="/#timeline-container", id="timeline-container-nav", class="dot")
     a(href="/#author-popular-words-container", id="author-popular-words-container-nav", class="dot")
 
-  header
-    div(class="header-wrapper")
-      div(class="col-md-12 text-center")
-        h1 UNITED NATIONS
+  div(class="legend-top-bar")
+    span(class="legend-label") 10 HIGH COMMISSIONERS
+    - each author in authors
+      span(class="#{author.cssClass()} author-image", original-title="<h1 class=\"#{author.cssClass()}\">#{author.fullname}</h1>")
+        img(src="/images/#{author.cssClass()}.jpg", width=40, height=40)
+    span(class="legend-label") COLOR KEY
 
-  div(class="content-wrapper")
+  div(class="content-wrapper row")
     div(class="row", id="figure-container", data-module="1", class="module")
       div(class="module-header col-md-12")
         h1 Words in Document
@@ -81,6 +89,12 @@ block scripts
       $headerWrapper = $('.header-wrapper');
       $headerWrapper.css('width', $(window).width());
       $headerWrapper.css('height', $(window).height());
+
+      $('.author-image').tipsy({
+        gravity: 'n'
+      });
+
+
       $(window).on('resize', function(e) {
 
         var fn = _.throttle(function() {
@@ -91,17 +105,21 @@ block scripts
       })
       var $modules = $('.module');
       var $reversed = $modules.get().reverse()
+      var $legend = $('.legend-top-bar');
+
+      $modules.on('mouseleave', function(e) {
+        var $toElement = $(e.toElement)
+        // return if hover tipsy
+        if ($toElement.hasClass('tipsy') || $toElement.parents('.tipsy').length > 0) {
+          return
+        } else {
+          $('.tipsy').remove();
+        }
+      })
 
       $(document).on('scroll', function(e) {
         var fn = _.throttle(function() {
             var scrollTop = $(window).scrollTop()
-            //$contentWrapper.css({
-            //  '-webkit-transform': 'translate3d(-0px, ' + -(3 * scrollTop) + 'px, 0px)',
-            //  '-webkit-transition': '.2s',
-            //  '-moz-transform': 'translate3d(-0px, ' + -(3 * scrollTop) + 'px, 0px)',
-            //  '-moz-transition': '.2s',
-            //  'transition': '.2s'
-            //})
 
             var freqChartOffset = Diction.skrollr.relativeToAbsolute($('#figure-container #figure')[0], 'bottom',
             'bottom')
@@ -116,14 +134,22 @@ block scripts
             var popularWordsOffset = Diction.skrollr.relativeToAbsolute($('#author-popular-words .author:first')[0], 'bottom',
               'center')
 
+            var showLegend = false;
             for (var i = 0; i < $reversed.length; i ++) {
               var offset = Diction.skrollr.relativeToAbsolute($reversed[i], 'top', 'top');
               if (scrollTop >= offset) {
+                showLegend = true;
                 var id = $($reversed[i]).attr('id');
                 $('.dot').removeClass('selected');
                 $('#' + id + '-nav').addClass('selected');
                 break;
               }
+            }
+
+            if (showLegend) {
+              $legend.css('top', '0px');
+            } else {
+              $legend.css('top', (-$legend.height() - 1) + 'px' );
             }
 
 
@@ -179,7 +205,7 @@ block scripts
 
       Diction.router = new Diction.Routers.IndexRouter({
         docs: !{data},
-        authors: !{authors},
+        authors: !{JSON.stringify(authors)},
         popularWords: !{popularWords}
       });
       Backbone.history.start();

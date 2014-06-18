@@ -10,10 +10,10 @@ var popularWords = require('../data/popular_words').words;
 
 exports.index = function(req, res){
   db.Doc.findAll().success(function(docs) {
-    db.Author.findAll().success(function(authors) {
+    db.Author.findAll({ order: ['hc'] }).success(function(authors) {
       res.render('index', {
         data: JSON.stringify(db.Doc.publicModels(docs)),
-        authors: JSON.stringify(authors),
+        authors: authors,
         popularWords: JSON.stringify(popularWords)
       });
     });

@@ -20,6 +20,13 @@ module.exports = function(sequelize, DataTypes) {
         Author.hasMany(models.WordDoc, { foreignKey: 'author' });
       },
     },
+    instanceMethods: {
+      cssClass: function() {
+        if (this.id === 'hocké')
+          return 'hocke';
+        return this.id;
+      }
+    }
   });
 
   return Author;
