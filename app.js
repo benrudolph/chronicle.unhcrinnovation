@@ -93,7 +93,6 @@ if (cluster.isMaster) {
 
   if (app.get('env') === 'production') {
     napConfig.minify = true;
-    napConfig.gzip = true;
     napConfig.mode = 'production';
     napConfig.uglifyOpts = { mangle: false };
   }
