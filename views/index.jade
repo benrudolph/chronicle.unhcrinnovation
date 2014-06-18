@@ -13,39 +13,44 @@ block content
         h1 UNITED NATIONS
 
   div(class="content-wrapper")
-    div(class="row", id="figure-container", class="module")
+    div(class="row", id="figure-container", data-module="1", class="module")
       div(class="module-header col-md-12")
         h1 Words in Document
-      div(id="figure")
-      div(class="col-md-6 col-md-offset-4 search-container")
-        label(for="search")
-          != 'Search a word:&nbsp;'
-        input(type="text", id="search", placeholder="")
-        span(class="current-word")
+      div(class="module-body")
+        div(class="legend-container legend-container-1")
+        div(id="figure")
+        div(class="col-md-6 col-md-offset-4 search-container")
+          label(for="search")
+            != 'Search a word:&nbsp;'
+          input(type="text", id="search", placeholder="")
+          span(class="current-word")
 
 
-    div(class="row", id="words-per-year-container", class="module")
+    div(class="row", id="words-per-year-container", data-module="2", class="module")
       div(class="module-header col-md-12")
         h1 Words over time
-      div(class="col-md-6 col-md-offset-4 search-container")
-        label(for="search")
-          != 'Search a word:&nbsp;'
-        input(type="text", id="words-per-year-search", placeholder="")
-        span(class="error-message")
-      div(class="col-md-10 col-md-offset-1")
-        div(id="words-per-year")
+      div(class="module-body")
+        div(class="col-md-6 col-md-offset-4 search-container")
+          label(for="search")
+            != 'Search a word:&nbsp;'
+          input(type="text", id="words-per-year-search", placeholder="")
+          span(class="error-message")
+        div(class="col-md-10 col-md-offset-1")
+          div(id="words-per-year")
 
-    div(class="row", id="timeline-container", class="module")
+    div(class="row", id="timeline-container", data-module="3", class="module")
       div(class="col-md-12 module-header")
         h1 Sentiment Analysis over time
-      div(class="col-md-12")
-        div(id="timeline")
+      div(class="module-body")
+        div(class="col-md-12")
+          div(id="timeline")
 
-    div(class="row", id="author-popular-words-container", class="module")
+    div(class="row", id="author-popular-words-container", data-module="4", class="module")
       div(class="col-md-12 module-header")
         h1 Who says what
-      div(class="col-md-10 col-md-offset-1")
-        div(id="author-popular-words")
+      div(class="module-body")
+        div(class="col-md-10 col-md-offset-1")
+          div(id="author-popular-words")
 
 block scripts
   script.
@@ -133,11 +138,13 @@ block scripts
       $modules.on('scrollSpy:enter', function() {
           var id = $(this).attr('id');
           $('#' + id + '-nav').addClass('selected');
+          console.log('enter')
       });
 
       $modules.on('scrollSpy:exit', function() {
           var id = $(this).attr('id');
           $('#' + id + '-nav').removeClass('selected');
+          console.log('exit')
       });
 
       $modules.scrollSpy();

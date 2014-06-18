@@ -95,10 +95,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     // Legend
 
     var self = this;
-    var legend = this.g.append('g').attr('class', 'legend')
-      .attr('transform', function(d, i) {
-        return 'translate(' + (this.width + 10) + ',10)';
-      }.bind(this));
+    var legend = d3.select('#figure-container .legend-container').append('svg').attr('class', 'legend')
 
     var legendRectLength = 10;
     var legendRectPadding = 2;

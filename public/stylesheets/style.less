@@ -95,6 +95,10 @@ a:hover {
     padding: 0px 60px;
     margin-bottom: 20px;
   }
+
+  .module-body {
+    position: relative;
+  }
 }
 
 #words-per-year {
@@ -342,6 +346,19 @@ line.hocke {
 .voronoi {
   fill: transparent;
   stroke: none;
+}
+
+.legend-container {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+  -moz-transition:all .5s;
+  -webkit-transition:all .5s;
+  -o-transition:all .5s;
+  transition:all .5s;
 }
 
 .dot-navigation {
