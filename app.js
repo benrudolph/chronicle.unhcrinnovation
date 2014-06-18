@@ -10,6 +10,45 @@ var path = require('path');
 var db = require('./models');
 
 var app = express();
+var nap = require('nap');
+
+
+// nap config
+nap({
+  publicDir: 'public',
+  assets: {
+    js: {
+      all: [
+        '/public/javascripts/jquery.min.js',
+        '/public/javascripts/jquery.tipsy.js',
+        '/public/javascripts/scrollspy.js',
+        '/public/javascripts/d3.js',
+        '/public/javascripts/underscore.js',
+        '/public/javascripts/backbone.js',
+        '/public/javascripts/ejs.js',
+        '/public/javascripts/skrollr.js',
+        '/public/javascripts/pubsub.js',
+        '/public/javascripts/nprogress.js',
+        '/public/javascripts/diction.js',
+        '/public/javascripts/models/*.js',
+        '/public/javascripts/collections/*.js',
+        '/public/javascripts/routers/*.js',
+        '/public/javascripts/views/**/*.js',
+        '/public/javascripts/figures/*.js',
+      ]
+    },
+    css: {
+      all: [
+        '/public/stylesheets/bootstrap.css',
+        '/public/stylesheets/nprogress.css',
+        '/public/stylesheets/tipsy.css',
+        '/public/stylesheets/style.css'
+      ]
+    },
+  }
+});
+
+app.locals.nap = nap;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -34,6 +73,14 @@ app.get('/popular_words', routes.popularWordsByAuthor);
 app.get('/sentences', routes.sentences);
 app.get('/words_per_year', routes.wordsPerYear);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+if ('development' === app.get('env')) {
+  http.createServer(app).listen(app.get('port'), function(){
+    console.log('Express server listening on port ' + app.get('port'));
+  });
+} else if ('production' === app.get('env')) {
+  nap.package(function() {
+    http.createServer(app).listen(app.get('port'), function(){
+      console.log("Express server listening on port " + app.get('port'));
+    });
+  });
+}

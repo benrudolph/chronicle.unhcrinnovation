@@ -2,48 +2,13 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
-    link(rel='stylesheet', href='/stylesheets/nprogress.css')
-    link(rel='stylesheet', href='/stylesheets/tipsy.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    != nap.css('all')
     meta(charset="utf-8")
   body
     div(class="container-fluid-fluid")
       block content
 
-    // libs
-    script(src='/javascripts/jquery.min.js')
-    script(src='/javascripts/jquery.tipsy.js')
-    script(src='/javascripts/scrollspy.js')
-    script(src='/javascripts/d3.js')
-    script(src='/javascripts/underscore.js')
-    script(src='/javascripts/backbone.js')
-    script(src='/javascripts/ejs.js')
-    script(src='/javascripts/skrollr.js')
-    script(src='/javascripts/pubsub.js')
-    script(src='/javascripts/nprogress.js')
 
-    // main
-    script(src='/javascripts/diction.js')
-
-    // models and collections
-    script(src='/javascripts/models/author.js')
-    script(src='/javascripts/models/doc.js')
-    script(src='/javascripts/collections/author.js')
-    script(src='/javascripts/models/author.js')
-    script(src='/javascripts/collections/doc.js')
-
-    // routers
-    script(src='/javascripts/routers/index.js')
-
-    // views
-    script(src='/javascripts/views/author/show.js')
-    script(src='/javascripts/views/author/index.js')
-
-    // figures
-    script(src='/javascripts/figures/freq_chart.js')
-    script(src='/javascripts/figures/timeline.js')
-    script(src='/javascripts/figures/words_per_year.js')
-    script(src='/javascripts/figures/author.js')
+    != nap.js('all')
 
     block scripts
