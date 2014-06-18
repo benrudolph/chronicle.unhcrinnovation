@@ -37,14 +37,14 @@ block content
     a(href="/#timeline-container", id="timeline-container-nav", class="dot")
     a(href="/#author-popular-words-container", id="author-popular-words-container-nav", class="dot")
 
-  div(class="legend-top-bar")
+  div(class="legend-top-bar hidden")
     span(class="legend-label") 10 HIGH COMMISSIONERS
     - each author in authors
       span(class="#{author.cssClass()} author-image", original-title="<h1 class=\"#{author.cssClass()}\">#{author.fullname}</h1>")
         img(src="/images/#{author.cssClass()}.jpg", width=40, height=40)
     span(class="legend-label") COLOR KEY
 
-  div(class="content-wrapper row")
+  div(class="content-wrapper row delay-show")
     div(class="row", id="figure-container", data-module="1", class="module")
       div(class="module-header col-md-12")
         h1 Words in Document
@@ -108,6 +108,9 @@ block scripts
         trigger: 'hover' // how tooltip is triggered - hover | focus | manual
       };
 
+      // Only show content when it's ready
+      $('.delay-show').removeClass('delay-show')
+
       $contentWrapper = $('.content-wrapper');
 
       $headerWrapper = $('.header-wrapper');
@@ -162,6 +165,7 @@ block scripts
             for (var i = 0; i < $reversed.length; i ++) {
               var offset = Diction.skrollr.relativeToAbsolute($reversed[i], 'top', 'top');
               if (scrollTop >= offset) {
+                console.log($reversed[i]);
                 showLegend = true;
                 var id = $($reversed[i]).attr('id');
                 $('.dot').removeClass('selected');
@@ -171,9 +175,9 @@ block scripts
             }
 
             if (showLegend) {
-              $legend.css('top', '0px');
+              $legend.removeClass('hidden')
             } else {
-              $legend.css('top', (-$legend.height() - 1) + 'px' );
+              $legend.addClass('hidden')
             }
 
 
@@ -242,6 +246,7 @@ block scripts
       Backbone.history.start();
 
       Diction.skrollr = skrollr.init();
+
 
 
 

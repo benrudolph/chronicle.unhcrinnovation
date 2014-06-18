@@ -197,7 +197,6 @@ a:hover {
   -o-transition: 0.3s ease-in-out top;
   transition: 0.3s ease-in-out top;
   position: fixed;
-  top: -61px;
   height: 60px;
   background: rgba(240, 240, 240, 0.9);
   border-bottom: 1px solid @gray;
@@ -205,6 +204,7 @@ a:hover {
   right: 0;
   z-index: 101;
   text-align: center;
+  top: 0;
 
   .legend-label {
     color: @navy;
@@ -227,6 +227,14 @@ a:hover {
       -webkit-border-radius: 40px;
     }
   }
+}
+
+.legend-top-bar.hidden {
+  display: none;
+  top: -61px;
+}
+.delay-show {
+  display: none;
 }
 
 .intro-body {
