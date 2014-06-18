@@ -118,7 +118,7 @@ block scripts
 
             for (var i = 0; i < $reversed.length; i ++) {
               var offset = Diction.skrollr.relativeToAbsolute($reversed[i], 'top', 'top');
-              if (scrollTop > offset) {
+              if (scrollTop >= offset) {
                 var id = $($reversed[i]).attr('id');
                 $('.dot').removeClass('selected');
                 $('#' + id + '-nav').addClass('selected');
