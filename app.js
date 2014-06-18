@@ -22,6 +22,7 @@ if (cluster.isMaster) {
   var http = require('http');
   var path = require('path');
   var db = require('./models');
+  var less = require('less');
 
   var app = express();
 
@@ -54,7 +55,7 @@ if (cluster.isMaster) {
           '/public/stylesheets/bootstrap.css',
           '/public/stylesheets/nprogress.css',
           '/public/stylesheets/tipsy.css',
-          '/public/stylesheets/style.css'
+          '/public/stylesheets/style.less'
         ]
       },
     }
