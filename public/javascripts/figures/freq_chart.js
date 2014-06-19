@@ -64,12 +64,11 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       .call(this.yAxis)
       .append('text')
         .attr("transform", "rotate(-90)")
-        .attr("y", -40)
-        .attr("x", -this.height / 2)
+        .attr('class', 'axis-label')
+        .attr("y", 12)
+        .attr("x", -2)
         .attr("dy", "-.21em")
-        .style("text-anchor", "middle")
-        .style('font-size', '12px')
-        .text('WORD OCCURENCES');
+        .text('Word count');
 
     this.brush = d3.svg.brush()
       .x(this.x)

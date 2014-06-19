@@ -85,7 +85,14 @@ Diction.Figures.WordsPerYear = Backbone.View.extend({
 
     this.g.append('g')
       .attr('class', 'y axis')
-      .call(this.yAxis);
+      .call(this.yAxis)
+      .append('text')
+        .attr("transform", "rotate(-90)")
+        .attr('class', 'axis-label')
+        .attr("y", 11)
+        .attr("x", 0)
+        .attr("dy", "-.21em")
+        .text('Count per ' + this.perXWords + ' words');
 
     var authorData = _.sortBy(Diction.authors.models, function(d) { return -d.get('hc'); });
 
