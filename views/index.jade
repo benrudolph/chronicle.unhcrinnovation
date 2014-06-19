@@ -3,12 +3,12 @@ extends layout
 block intro
   div(class="intro-body")
     div(data-0="opacity: 1", data-200="opacity: 0")
-      div(class="intro-text intro-logo")
       div(class="intro-text intro-tagline")
-        h3
-          != 'VISUALIZE. ANALYZE. VALIDATE'
-        h4
-          != 'Connecting Data and Humans.'
+        h3 UNHCRAXIS
+        h1
+          != 'Visualize. Analyze. Communicate.'
+        p
+          != 'Over the years UNHCR has grown and adapted its approach to protecting refugees to match current demands and crises. On World Refugee Day, we want to not only appreciate the hardships of today’s refugees, but also of refugees from years past. Below is a visualization that breaks down how different High Commissioners for Refugees have changed their tone and word choice in their speeches, indicating changes in direction that UNHCR has taken to best serve refugees.'
       div(class="intro-text intro-scroll") Scroll
 
     div(class="intro-fact intro-commissioners", data-0="bottom:-50%",
@@ -37,12 +37,11 @@ block content
     a(href="/#timeline-container", id="timeline-container-nav", class="dot")
     a(href="/#author-popular-words-container", id="author-popular-words-container-nav", class="dot")
 
-  div(class="legend-top-bar hidden")
+  div(class="legend-top-bar above")
     span(class="legend-label") 10 HIGH COMMISSIONERS
     - each author in authors
       span(class="#{author.cssClass()} author-image", original-title="<h1 class=\"#{author.cssClass()}\">#{author.fullname}</h1>")
         img(src="/images/#{author.cssClass()}.jpg", width=40, height=40)
-    span(class="legend-label") COLOR KEY
 
   div(class="content-wrapper row delay-show")
     div(class="row", id="figure-container", data-module="1", class="module")
@@ -175,9 +174,9 @@ block scripts
             }
 
             if (showLegend) {
-              $legend.removeClass('hidden')
+              $legend.removeClass('above')
             } else {
-              $legend.addClass('hidden')
+              $legend.addClass('above')
             }
 
 

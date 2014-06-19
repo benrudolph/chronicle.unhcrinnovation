@@ -9,7 +9,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       height: 440,
       svg: d3.select('#figure'),
       data: [],
-      margin: { top: 10, bottom: 20, left: 50, right: 100 },
+      margin: { top: 10, bottom: 40, left: 50, right: 100 },
       docs: new Diction.Collections.Doc()
     };
 
@@ -203,7 +203,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     infoRects.enter().append('rect');
     infoRects.attr('class', 'info-rect')
       .attr('x', function(d, i) { return (i / self.info.length) * self.width; })
-      .attr('y', 0)
+      .attr('y', this.height)
       .attr('height', 30)
       .attr('width', this.width / this.info.length);
 
@@ -212,7 +212,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     infoText.enter().append('text');
     infoText.attr('x', function(d, i) { return (i / self.info.length) * self.width + 8; })
       .attr('class', 'info-label')
-      .attr('y', 0)
+      .attr('y', this.height)
       .attr('dy', '1.4em')
       .text(function(d) {
         if (d == 'query') {

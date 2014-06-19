@@ -12,6 +12,10 @@ Diction.Figures.Timeline = Backbone.View.extend({
       docs: new Diction.Collections.Doc()
     };
 
+    if ($(window).width() < 800) {
+      defaults.width = $(window).width() - 60;
+    }
+
     _.defaults(this, attrs, defaults);
 
 

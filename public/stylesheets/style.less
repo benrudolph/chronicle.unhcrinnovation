@@ -205,6 +205,7 @@ a:hover {
   z-index: 101;
   text-align: center;
   top: 0;
+  overflow: hidden;
 
   .legend-label {
     color: @navy;
@@ -229,8 +230,7 @@ a:hover {
   }
 }
 
-.legend-top-bar.hidden {
-  display: none;
+.legend-top-bar.above {
   top: -61px;
 }
 .delay-show {
@@ -244,6 +244,12 @@ a:hover {
   position: relative;
   z-index: 100;
   color: white;
+  pointer-events: none;
+
+  p {
+    text-align: left;
+    font-weight: 300;
+  }
 
   h1 {
     font-weight: 300;
@@ -289,11 +295,12 @@ a:hover {
     background-repeat: no-repeat;
     background-image: url('/images/arrow.png');
     display: inline-block;
-    width: 67px;
-    height: 69px;
+    width: 60px;
+    height: 60px;
     position: absolute;
-    margin-left: -15px;
-    top: 14px;
+    margin-left: -10px;
+    top: 22px;
+    background-size: 52px;
   }
 
   .big-number {
@@ -306,12 +313,28 @@ a:hover {
     line-height: 100px;
   }
 
+  .intro-tagline:before {
+    content: ' ';
+    width: 180px;
+    height: 180px;
+    background-color: white;
+    border-radius: 100px;
+    display: inline-block;
+    position: absolute;
+    left: -200px;
+
+  }
+
   .intro-tagline {
-    top: 60%;
+    top: 30%;
+    text-align: left;
+    left: 50%;
+    margin-left: -100px;
+    width: 600px;
   }
 
   .intro-scroll {
-    top: 90%;
+    bottom: 70px;
     -webkit-animation-direction: normal;
     -webkit-animation-duration: 3s;
     -webkit-animation-iteration-count: infinite;
