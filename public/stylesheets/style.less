@@ -66,10 +66,10 @@
 }
 
 body {
-  background-size: cover;
+  /*background-size: cover;
   background-repeat: no-repeat;
   background-image: url('/images/hc.jpg');
-  background-attachment: fixed;
+  background-attachment: fixed;*/
   font-family: 'Lato', Helvetica, Arial, sans-serif;
   color: @black;
 }
@@ -103,6 +103,7 @@ a:hover {
   position: relative;
   margin-top: 2500px;
   background-color: white;
+  z-index: 50;
 }
 
 .module {
@@ -266,6 +267,28 @@ a:hover {
     font-size: 16px;
     margin-top: 4px;
     margin-bottom: 4px;
+  }
+
+  .intro-intro {
+    background-size: cover;
+    background-repeat: repeat-y;
+    background-image: url('/images/hc.jpg');
+    background-position-y: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+  }
+
+  .intro-commissioners-background {
+    background-size: cover;
+    background-repeat: repeat-y;
+    background-image: url('/images/hcs.jpg');
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    right: 0;
   }
 
   .intro-text, .intro-fact {

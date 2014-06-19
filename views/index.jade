@@ -2,14 +2,17 @@ extends layout
 
 block intro
   div(class="intro-body")
-    div(data-0="opacity: 1", data-200="opacity: 0")
-      div(class="intro-text intro-tagline")
+    div(class="intro-intro", data-0="background-position:100% 0px", data-1000="background-position:100% -200px")
+      div(class="intro-text intro-tagline", data-0="opacity: 1", data-200="opacity: 0")
         h3 UNHCRAXIS
         h1
           != 'Visualize. Analyze. Communicate.'
         p
           != 'Over the years UNHCR has grown and adapted its approach to protecting refugees to match current demands and crises. On World Refugee Day, we want to not only appreciate the hardships of today’s refugees, but also of refugees from years past. Below is a visualization that breaks down how different High Commissioners for Refugees have changed their tone and word choice in their speeches, indicating changes in direction that UNHCR has taken to best serve refugees.'
-      div(class="intro-text intro-scroll") Scroll
+      div(class="intro-text intro-scroll", data-0="opacity: 1", data-200="opacity: 0") Scroll
+
+    div(class="intro-commissioners-background" data-0="bottom: -100%; top: 100%"
+        data-500="bottom: 0; top: 0;")
 
     div(class="intro-fact intro-commissioners", data-0="bottom:-50%",
         data-500="bottom:50%", data-1000="opacity:1", data-1500="opacity:0")
