@@ -3,10 +3,14 @@ extends layout
 block intro
   div(class="intro-body")
     div(class="intro-intro", data-0="background-position:100% 0px", data-1000="background-position:100% -200px")
+      div
+        img(src="/images/logo.png", width="60", height="60", class="intro-text intro-logo", data-0="opacity: 1", data-200="opacity: 0")
       div(class="intro-text intro-tagline", data-0="opacity: 1", data-200="opacity: 0")
-        h3 UNHCRAXIS
-        h1
-          != 'Visualize. Analyze. Communicate.'
+        h1(class="big-number")
+          b
+            != '1,774,931 WORDS'
+        h2
+          != 'A chronicle of how UNHCR terminology and language has changed over 64 years'
         p
           != 'Over the years UNHCR has grown and adapted its approach to protecting refugees to match current demands and crises. On World Refugee Day, we want to not only appreciate the hardships of today’s refugees, but also of refugees from years past. Below is a visualization that breaks down how different High Commissioners for Refugees have changed their tone and word choice in their speeches, indicating changes in direction that UNHCR has taken to best serve refugees.'
       div(class="intro-text intro-scroll", data-0="opacity: 1", data-200="opacity: 0") Scroll
@@ -15,22 +19,32 @@ block intro
         data-500="bottom: 0; top: 0;",  data-2200="background-position:100% 0px",
         data-3200="background-position:100% -180px")
 
-    div(class="intro-fact intro-commissioners delay-show", data-0="bottom:-50%",
-        data-500="bottom:50%", data-1000="opacity:1", data-1500="opacity:0")
-      div(class="big-number") 10
+    div(class="intro-fact intro-commissioners delay-show", data-0="bottom:-80%",
+        data-500="bottom:30%", data-1000="opacity:1", data-1500="opacity:0")
+      div(class="huge-number") 10
       h1 HIGH COMMISSIONERS
 
       h2(class="intro-years")
         != '1950 - 2014'
 
+      div(class="intro-authors")
+        - each author, i in [authors[0], authors[5], authors[1], authors[6], authors[2], authors[7], authors[3], authors[8], authors[4], authors[9]]
+
+          - if (i + 1 == 10)
+            div(class="intro-author") #{i + 1}&nbsp;&nbsp;#{author.fullname}
+          - else if (i == 0)
+            div(class="intro-author") 0#{i + 1}&nbsp;&nbsp;Gerrit Goedhart
+          - else
+            - if (i % 2 == 0)
+              div(class="intro-author") 0#{(i / 2) + 1}&nbsp;&nbsp;#{author.fullname}
+            - else
+              div(class="intro-author") 0#{((i + 11) / 2)}&nbsp;&nbsp;#{author.fullname}
+
+
     div(class="intro-fact intro-speeches delay-show", data-1000="bottom:-50%",
         data-1500="bottom:50%", data-1700="opacity:1", data-2000="opacity:0")
       div(class="huge-number") 703
       h1 SPEECHES
-      h2(class="intro-fact intro-words") 1,774,931 WORDS
-
-
-
 
 block content
   div(class="dot-navigation")

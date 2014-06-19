@@ -101,7 +101,7 @@ a:hover {
 
 .content-wrapper {
   position: relative;
-  margin-top: 1700px;
+  margin-top: 1200px;
   background-color: white;
   z-index: 100;
 }
@@ -275,19 +275,36 @@ a:hover {
     font-weight: 300;
     margin-top: 4px;
     margin-bottom: 4px;
-    border-bottom: 1px solid white;
     display: inline-block;
   }
 
   h2 {
     margin-top: 4px;
-    font-weight: normal;
+    font-weight: 300;
+    font-size: 26px;
   }
 
   h3 {
     font-size: 18px;
     margin-top: 4px;
     margin-bottom: 4px;
+  }
+
+  .intro-authors {
+    text-align: left;
+    width: 400px;
+    margin: 0 auto;
+    font-weight: 300;
+    padding-top: 14px;
+
+    .intro-author {
+      width: 190px;
+      display: inline-block;
+      padding: 6px;
+      padding-left: 30px;
+
+    }
+
   }
 
   h4 {
@@ -331,13 +348,9 @@ a:hover {
   }
 
   .intro-logo {
-    top: 45%;
-    margin-top: -90px;
-    margin-left: -90px;
-    width: 180px;
-    height: 180px;
-    border-radius: 100px;
-    background-color: white;
+    width: auto;
+    margin-left: -30px;
+    margin-top: 30px
   }
 
   .intro-scroll:before {
@@ -363,24 +376,16 @@ a:hover {
     line-height: 100px;
   }
 
-  .intro-tagline:before {
-    content: ' ';
-    width: 180px;
-    height: 180px;
-    background-color: white;
-    border-radius: 100px;
-    display: inline-block;
-    position: absolute;
-    left: -200px;
-
-  }
-
   .intro-tagline {
     top: 30%;
-    text-align: left;
+    text-align: center;
     left: 50%;
-    margin-left: -100px;
+    margin-left: -300px;
     width: 600px;
+    p {
+      margin-top: 24px;
+      text-align: left;
+    }
   }
 
   .intro-scroll {
