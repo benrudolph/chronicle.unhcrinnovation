@@ -136,6 +136,36 @@ a:hover {
   .module-body {
     position: relative;
   }
+
+  .freq-results {
+    width: 780px;
+    margin: 0 auto;
+    text-align: left;
+
+    .freq-result {
+      margin-left: 5px;
+      margin-right: 5px;
+      display: inline-block;
+      width: 200px;
+
+      .freq-label {
+        font-weight: bold;
+      }
+
+      .freq-display {
+        line-height: 30px;
+        font-size: 30px;
+      }
+
+      .freq-display.current-word {
+        color: @navy;
+      }
+    }
+
+    .freq-result-small {
+      width: 160px;
+    }
+  }
 }
 
 #words-per-year {
@@ -182,7 +212,7 @@ a:hover {
   shape-rendering: crispEdges;
 }
 
-.current-word, .error-message {
+.error-message {
   margin-left: 30px
 }
 
@@ -509,6 +539,26 @@ text {
 
 input {
   border: 1px solid rgb(200, 200, 200);
+  height: 26px;
+  border: 1px solid @gray;
+  background-color: @light-gray;
+  border-radius: 4px;
+  display: block;
+  padding-left: 8px;
+  padding-top: 5px;
+  width: 180px;
+  padding-bottom: 5px;
+  -moz-transition:all .5s;
+  -webkit-transition:all .5s;
+  -o-transition:all .5s;
+  transition:all .5s;
+}
+
+input:focus {
+  border: 1px solid @gray;
+  outline: none;
+  background-color: white;
+
 }
 
 .text-center {

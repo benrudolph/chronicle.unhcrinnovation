@@ -68,13 +68,22 @@ block content
         p.
           From the inception of UNHCR in 1951 to 2014, there have been 703 recorded speeches given by the 10 high commissioners. As times have changed and priorities shifted, their rhetoric has evolved. The visualization below examines the frequency at which a word is mentioned in a speech. The height of a bar corresponds with the mentions of a word in a speech. Try searching for your own terms, some good ones to try are: education, gender, camps, innovation and urban. By hovering over a bar, you will be able to view the sentences where that particular word was mentioned. Also try click and dragging to analyze only a certain section of the figure.
       div(class="module-body")
-        div(class="legend-container legend-container-1")
+        div(class="legend-container")
         div(id="figure")
-        div(class="col-md-6 col-md-offset-4 search-container")
-          label(for="search")
-            != 'Search a word:&nbsp;'
-          input(type="text", id="search", placeholder="")
-          span(class="current-word")
+        div(class="freq-results")
+          div(class="freq-result search-container")
+            input(type="text", id="search", placeholder="")
+            label(for="search")
+              != 'Search a word'
+          div(class="freq-result")
+            div(class="freq-display current-word") &nbsp;
+            div(class="freq-label") query
+          div(class="freq-result freq-result-small")
+            div(class="freq-display occurences") 0
+            div(class="freq-label") occurences
+          div(class="freq-result freq-result-small")
+            div(class="freq-display speeches") 0
+            div(class="freq-label") speeches
 
 
     div(class="row", id="words-per-year-container", data-module="2", class="module")
@@ -84,9 +93,9 @@ block content
           While examining a word mentioned in a document is useful, it does not address trends per year, but rather the trends of each consecutive speech regard. Below, each graph shows the trend of a word over UNHCR’s history. The word is then normalized by counting the number of mentions per 1000 words.
       div(class="module-body")
         div(class="col-md-6 col-md-offset-4 search-container")
-          label(for="search")
-            != 'Search a word:&nbsp;'
           input(type="text", id="words-per-year-search", placeholder="")
+          label(for="search")
+            != 'Search a word'
           span(class="error-message")
         div(class="col-md-10 col-md-offset-1")
           div(id="words-per-year")

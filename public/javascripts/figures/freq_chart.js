@@ -100,39 +100,6 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     }.bind(this));
     this.info = ['query', 'speeches', 'occurences'];
 
-    // Legend
-
-//    var self = this;
-//    var legend = d3.select('#figure-container .legend-container').append('svg').attr('class', 'legend')
-//
-//    var legendRectLength = 10;
-//    var legendRectPadding = 2;
-//
-//    var legendLabels = legend.selectAll('.legend-label').data(Diction.authors.models);
-//    legendLabels.enter().append('g');
-//    legendLabels
-//      .attr('transform', function(d, i) {
-//        return 'translate(0,' + i * (legendRectLength + (2 * legendRectPadding)) + ')';
-//      })
-//      .each(function(d) {
-//        var g = d3.select(this);
-//        g.append('rect')
-//          .attr('class', d.cssClass() + ' legend-rect')
-//          .attr('x', 4)
-//          .attr('y', 2)
-//          .attr('width', legendRectLength)
-//          .attr('height', legendRectLength);
-//
-//        g.append('text')
-//          .attr('x', legendRectLength + (4 * legendRectPadding))
-//          .attr('y', legendRectLength)
-//          .attr('class', 'svg-label')
-//          .text(d.get('fullname'));
-//
-//
-//      });
-//
-
   },
 
   render: function() {
@@ -206,33 +173,8 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       .duration(Diction.Constants.DURATION)
       .call(this.yAxis);
 
-    // Info labels
-    var infoRects = this.g.selectAll('.info-rect').data(this.info);
-    infoRects.enter().append('rect');
-    infoRects.attr('class', 'info-rect')
-      .attr('x', function(d, i) { return (i / self.info.length) * self.width; })
-      .attr('y', this.height)
-      .attr('height', 30)
-      .attr('width', this.width / this.info.length);
 
 
-    var infoText = this.g.selectAll('.info-label').data(this.info);
-    infoText.enter().append('text');
-    infoText.attr('x', function(d, i) { return (i / self.info.length) * self.width + 8; })
-      .attr('class', 'info-label')
-      .attr('y', this.height)
-      .attr('dy', '1.4em')
-      .text(function(d) {
-        if (d == 'query') {
-          return d + ': ' + self.query;
-        } else if (d == 'occurences') {
-          var sum = _.reduce(self.data, function(memo, d) { return memo + d.count; }, 0);
-          return d + ': ' + Diction.Formats.COMMA(sum);
-        } else {
-          var speechCount = _.uniq(self.data, function(d) { return d.documentId; }).length;
-          return d + ': ' + speechCount;
-        }
-      });
 
     // AVERAGE LINE
     var avg = _.reduce(this.data, function(memo, doc) { return memo +  doc.count }, 0) / this.data.length;
@@ -287,10 +229,20 @@ Diction.Figures.FreqChart = Backbone.View.extend({
         .attr('y', function(d) { return y(d.count); });
 
 
+    this.updateResults(this.data);
 
     $('.bar').tipsy({
       trigger: 'manual',
     });
+  },
+
+  updateResults: function(data) {
+
+    var sum = _.reduce(data, function(memo, d) { return memo + d.count; }, 0);
+    var speechCount = _.uniq(data, function(d) { return d.documentId; }).length;
+    $('#figure-container .current-word').text(this.query);
+    $('#figure-container .occurences').text(Diction.Formats.COMMA(sum));
+    $('#figure-container .speeches').text(speechCount);
   },
 
   compare: function(a, b) {
@@ -309,18 +261,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
         return value >= extent[0] && value <= extent[1];
       })
 
-    var infoText = this.g.selectAll('.info-label').data(this.info)
-      .text(function(d) {
-        if (d == 'query') {
-          return d + ': ' + self.query;
-        } else if (d == 'occurences') {
-          var sum = _.reduce(filteredDocs, function(memo, d) { return memo + d.count; }, 0);
-          return d + ': ' + Diction.Formats.COMMA(sum);
-        } else {
-          var speechCount = _.uniq(filteredDocs, function(d) { return d.documentId; }).length;
-          return d + ': ' + speechCount;
-        }
-      });
+    this.updateResults(filteredDocs);
 
     var avg = _.reduce(filteredDocs, function(memo, doc) { return memo +  doc.count }, 0) / filteredDocs.length;
     var max = _.max(filteredDocs, function(d) { return d.count; });

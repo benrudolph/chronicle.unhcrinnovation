@@ -4,7 +4,7 @@ var Diction = {
     DURATION: 1000,
     DEFAULT_QUERY: 'refugee',
     DEFAULT_WORDS: ['camps', 'syria', 'innovation', 'germany', 'urban', 'education',
-      'sudan', 'peace', 'lebanon'],
+      'sudan'],
     MONTHS: [
       'Jan',
       'Feb',
