@@ -92,6 +92,11 @@ block scripts
     $(document).ready(function() {
       _.templateSettings.variable = "context";
 
+      console.log('  _   _ _  _ _  _  ___ ___\n | | | | \\| | || |/ __| _ \\\n | |_| | .` | __ | (__|   /\n  \\___/|_|\\_|_||_|\\___|_|_\\')
+
+      console.log('   (_)__  ___  ___ _  _____ _/ /_(_)__  ___ \n  / / _ \\/ _ \\/ _ \\ |/ / _ `/ __/ / _ \\/ _ \\\n /_/_//_/_//_/\\___/___/\\_,_/\\__/_/\\___/_//_/')
+      console.log('http://www.github.com/benrudolph/unhcrdiction');
+
       var animated = {},
           wordsAdded = [];
       var $headerWrapper,
@@ -168,7 +173,6 @@ block scripts
             for (var i = 0; i < $reversed.length; i ++) {
               var offset = Diction.skrollr.relativeToAbsolute($reversed[i], 'top', 'top');
               if (scrollTop >= offset) {
-                console.log($reversed[i]);
                 showLegend = true;
                 var id = $($reversed[i]).attr('id');
                 $('.dot').removeClass('selected');
