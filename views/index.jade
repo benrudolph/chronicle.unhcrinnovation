@@ -12,25 +12,25 @@ block intro
       div(class="intro-text intro-scroll", data-0="opacity: 1", data-200="opacity: 0") Scroll
 
     div(class="intro-commissioners-background" data-0="bottom: -100%; top: 100%"
-        data-500="bottom: 0; top: 0;")
+        data-500="bottom: 0; top: 0;",  data-2200="background-position:100% 0px",
+        data-3200="background-position:100% -180px")
 
     div(class="intro-fact intro-commissioners", data-0="bottom:-50%",
         data-500="bottom:50%", data-1000="opacity:1", data-1500="opacity:0")
       div(class="big-number") 10
       h1 HIGH COMMISSIONERS
 
-    h2(class="intro-fact intro-years", data-0="bottom: -50%",
-        data-500="bottom: -45%", data-700="bottom: 45%; opacity: 1", data-1500="opacity:0")
-      != '1951 - 2014'
+      h2(class="intro-fact intro-years")
+        != '1950 - 2014'
 
-    div(class="intro-fact intro-speeches", data-1500="bottom:-50%",
-        data-2000="bottom:50%", data-2200="opacity:1", data-2500="opacity:0")
+    div(class="intro-fact intro-speeches", data-1000="bottom:-50%",
+        data-1500="bottom:50%", data-1700="opacity:1", data-2000="opacity:0")
       div(class="huge-number") 703
       h1 SPEECHES
 
 
-    h1(class="intro-fact intro-words", data-2500="bottom:-50%",
-        data-3000="bottom:50%", data-3200="opacity:1", data-3500="opacity:0") 1,774,931 WORDS
+    h1(class="intro-fact intro-words", data-1700="bottom:-50%",
+        data-2200="bottom:50%", data-2400="opacity:1", data-2700="opacity:0") 1,774,931 WORDS
 
 
 block content
@@ -41,10 +41,11 @@ block content
     a(href="/#author-popular-words-container", id="author-popular-words-container-nav", class="dot")
 
   div(class="legend-top-bar above")
-    span(class="legend-label") 10 HIGH COMMISSIONERS
-    - each author in authors
-      span(class="#{author.cssClass()} author-image", original-title="<h1 class=\"#{author.cssClass()}\">#{author.fullname}</h1>")
-        img(src="/images/#{author.cssClass()}.jpg", width=40, height=40)
+    div(class="author-container")
+      span(class="legend-label") 10 HIGH COMMISSIONERS
+      - each author in authors
+        span(class="#{author.cssClass()} author-image", original-title="<h1 class=\"#{author.cssClass()}\">#{author.fullname}</h1>")
+          img(src="/images/#{author.cssClass()}.jpg", width=40, height=40)
 
   div(class="content-wrapper row delay-show")
     div(class="row", id="figure-container", data-module="1", class="module")
