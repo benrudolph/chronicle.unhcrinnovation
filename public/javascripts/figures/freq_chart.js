@@ -9,7 +9,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       height: 440,
       svg: d3.select('#figure'),
       data: [],
-      margin: { top: 10, bottom: 40, left: 60, right: 100 },
+      margin: { top: 8, bottom: 40, left: 60, right: 100 },
       docs: new Diction.Collections.Doc()
     };
 
