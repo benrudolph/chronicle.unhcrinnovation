@@ -3,6 +3,8 @@ extends layout
 block intro
   div(class="intro-body")
     div(class="intro-intro", data-0="background-position:100% 0px", data-1000="background-position:100% -200px")
+      div(class="intro-credits", data-0="opacity: 1", data-200="opacity: 0")
+        != 'a UNCHR<b>AXIS</b> experience'
       div
         img(src="/images/logo.png", width="60", height="60", class="intro-text intro-logo", data-0="opacity: 1", data-200="opacity: 0")
       div(class="intro-text intro-tagline", data-0="opacity: 1", data-200="opacity: 0")
