@@ -9,7 +9,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       height: 440,
       svg: d3.select('#figure'),
       data: [],
-      margin: { top: 10, bottom: 40, left: 50, right: 100 },
+      margin: { top: 10, bottom: 40, left: 60, right: 100 },
       docs: new Diction.Collections.Doc()
     };
 
@@ -61,7 +61,15 @@ Diction.Figures.FreqChart = Backbone.View.extend({
 
     this.g.append('g')
       .attr('class', 'y axis')
-      .call(this.yAxis);
+      .call(this.yAxis)
+      .append('text')
+        .attr("transform", "rotate(-90)")
+        .attr("y", -40)
+        .attr("x", -this.height / 2)
+        .attr("dy", "-.21em")
+        .style("text-anchor", "middle")
+        .style('font-size', '12px')
+        .text('WORD OCCURENCES');
 
     this.brush = d3.svg.brush()
       .x(this.x)
@@ -73,6 +81,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       .selectAll('rect')
         .attr('y', 0)
         .attr('height', this.height);
+
 
     $.subscribe('scroll', function() {
       if (this.tippedEl) {
