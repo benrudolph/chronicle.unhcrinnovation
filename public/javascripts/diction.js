@@ -3,7 +3,7 @@ var Diction = {
     ENTER: 13,
     DURATION: 1000,
     DEFAULT_QUERY: 'refugee',
-    DEFAULT_WORDS: ['camps', 'syria', 'innovation', 'germany', 'urban', 'education',
+    DEFAULT_WORDS: ['camps', 'syria', 'innovation', 'urban', 'education',
       'sudan'],
     MONTHS: [
       'Jan',

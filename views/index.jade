@@ -229,7 +229,7 @@ block scripts
       });
 
       function animate(offset, route) {
-          if (window.scrollY > offset && !animated[route]) {
+          if ($(window).scrollTop() > offset && !animated[route]) {
             Diction.router[route]()
             animated[route] = true;
           }
