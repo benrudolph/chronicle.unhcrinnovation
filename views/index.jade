@@ -166,6 +166,8 @@ block scripts
       $headerWrapper = $('.header-wrapper');
       $headerWrapper.css('width', $(window).width());
       $headerWrapper.css('height', $(window).height());
+      var isMobile = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()));
+
 
       $('.author-image').tipsy({
         gravity: 'n'
@@ -194,7 +196,17 @@ block scripts
         }
       })
 
-      $(document).on('scroll', function(e) {
+      $(document).on('scroll', scroll);
+
+      function animate(offset, route) {
+          if ($(window).scrollTop() > offset && !animated[route]) {
+            Diction.router[route]()
+            animated[route] = true;
+          }
+
+      }
+
+      function scroll() {
         var fn = _.throttle(function() {
             var scrollTop = $(window).scrollTop()
 
@@ -223,11 +235,13 @@ block scripts
               }
             }
 
+
             if (showLegend) {
               $legend.removeClass('above')
             } else {
               $legend.addClass('above')
             }
+
 
 
             animate(freqChartOffset, 'freqchartRoute');
@@ -238,17 +252,7 @@ block scripts
             //$.publish('scroll');
           }, 100);
         fn();
-
-      });
-
-      function animate(offset, route) {
-          if ($(window).scrollTop() > offset && !animated[route]) {
-            Diction.router[route]()
-            animated[route] = true;
-          }
-
       }
-
       $('.intro-scroll').on('click', function(e) {
 
         Diction.skrollr.animateTo($(window).height());
@@ -310,6 +314,14 @@ block scripts
       Backbone.history.start();
 
       Diction.skrollr = skrollr.init();
+      if (isMobile) {
+        Diction.router.freqchartRoute();
+        Diction.router.timelineRoute();
+        Diction.router.wordsPerYearRoute();
+        Diction.router.authorsRoute();
+        animated = { freqchartRoute: true, timelineRoute: true,
+                     wordsPerYearRoute: true, authorsRoute: true };
+      }
 
       console.log('  _   _ _  _ _  _  ___ ___\n | | | | \\| | || |/ __| _ \\\n | |_| | .` | __ | (__|   /\n  \\___/|_|\\_|_||_|\\___|_|_\\')
 
