@@ -68,7 +68,7 @@ block content
         span(class="#{author.cssClass()} author-image", original-title="<h1 class=\"#{author.cssClass()}\">#{author.fullname}</h1>")
           img(src="/images/#{author.cssClass().toLowerCase()}-thumb-bw.jpg", width=40, height=40)
 
-  div(class="content-wrapper row delay-show")
+  div(class="content-wrapper row delay-show", id="skrollr-body")
     div(class="", id="figure-container", data-module="1", class="module")
       div(class="module-header first")
         h1 What's in a speech?
