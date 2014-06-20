@@ -178,6 +178,11 @@ Diction.Figures.FreqChart = Backbone.View.extend({
 
     // AVERAGE LINE
     var avg = _.reduce(this.data, function(memo, doc) { return memo +  doc.count }, 0) / this.data.length;
+
+    if (this.data.length === 0) {
+      avg = 0;
+    }
+
     var avgLine = this.g.selectAll('.avg-line').data([avg]);
     avgLine.enter().append('line');
     avgLine
@@ -204,10 +209,14 @@ Diction.Figures.FreqChart = Backbone.View.extend({
 
     // MAX LINE
     var max = _.max(this.data, function(d) { return d.count; });
+    if (this.data.length === 0) {
+      max = { count: 0 };
+    }
+
     var maxLine = this.g.selectAll('.max-line').data([max]);
     maxLine.enter().append('line');
     maxLine
-      .attr('class', 'max-line ' + Diction.authors.get(max.author).cssClass())
+      .attr('class', 'max-line ' + (max.author ? Diction.authors.get(max.author).cssClass() : ''))
       .attr('x1', this.x(max.documentId))
       .attr('x2', this.width)
       .transition()
@@ -227,6 +236,11 @@ Diction.Figures.FreqChart = Backbone.View.extend({
       .transition()
       .duration(Diction.Constants.DURATION)
         .attr('y', function(d) { return y(d.count); });
+
+    if (this.data.length === 0) {
+      maxLabel.remove();
+      avgLabel.remove();
+    }
 
 
     this.updateResults(this.data);
@@ -266,6 +280,12 @@ Diction.Figures.FreqChart = Backbone.View.extend({
     var avg = _.reduce(filteredDocs, function(memo, doc) { return memo +  doc.count }, 0) / filteredDocs.length;
     var max = _.max(filteredDocs, function(d) { return d.count; });
 
+    if (filteredDocs.length === 0) {
+      // make it disappear!
+      avg = -500;
+      max = { count: -500 };
+    }
+
     var avgLine = this.g.selectAll('.avg-line').data([avg]);
     avgLine
       .attr('y1', function(d) { return this.y(d); }.bind(this))
@@ -278,7 +298,7 @@ Diction.Figures.FreqChart = Backbone.View.extend({
 
     var maxLine = this.g.selectAll('.max-line').data([max]);
     maxLine
-      .attr('class', 'max-line ' + Diction.authors.get(max.author).cssClass())
+      .attr('class', 'max-line ' + (max.author ? Diction.authors.get(max.author).cssClass() : ''))
       .attr('x1', this.x(max.documentId))
       .attr('y1', function(d) { return this.y(d.count); }.bind(this))
       .attr('y2', function(d) { return this.y(d.count); }.bind(this));

@@ -90,7 +90,7 @@ block content
 
     div(class="row", id="words-per-year-container", data-module="2", class="module")
       div(class="module-header")
-        h1 WORDS OVER TIME
+        h1 WORD TRENDS
         p.
           While examining a word mentioned in a document is useful, it does not address trends per year, but rather the trends of each consecutive speech regard. Below, each graph shows the trend of a word over UNHCR’s history. The word is then normalized by counting the number of mentions per 1000 words.
       div(class="module-body")
@@ -235,6 +235,12 @@ block scripts
           }
 
       }
+
+      $('.intro-scroll').on('click', function(e) {
+
+        Diction.skrollr.animateTo($(window).height());
+
+      });
 
       $('#search').on('keyup', function(e) {
         if (e.keyCode == Diction.Constants.ENTER) {

@@ -72,6 +72,7 @@ body {
   background-attachment: fixed;*/
   font-family: 'Lato', Helvetica, Arial, sans-serif;
   color: @black;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -174,10 +175,6 @@ a:hover {
 
 #author-popular-words {
   text-align: left;
-}
-
-#figure {
-  margin-top: 100px;
 }
 
 .info-rect {
@@ -457,6 +454,8 @@ a:hover {
     -moz-animation-iteration-count: infinite;
     -moz-animation-name: blink;
     -moz-animation-timing-function: ease-in-out;
+    pointer-events: auto;
+    cursor: pointer;
   }
 
 
