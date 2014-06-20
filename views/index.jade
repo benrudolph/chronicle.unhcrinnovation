@@ -34,14 +34,18 @@ block intro
         - each author, i in [authors[0], authors[5], authors[1], authors[6], authors[2], authors[7], authors[3], authors[8], authors[4], authors[9]]
 
           - if (i + 1 == 10)
-            div(class="intro-author") #{i + 1}&nbsp;&nbsp;#{author.fullname}
+            div(class="intro-author")
+              != (i  + 1) + "&nbsp;&nbsp;" + author.fullname.split(' ').join('&nbsp;')
           - else if (i == 0)
-            div(class="intro-author") 0#{i + 1}&nbsp;&nbsp;Gerrit Goedhart
+            div(class="intro-author")
+              != "0" + ((i / 2) + 1) + "&nbsp;&nbsp;Gerrit&nbsp;Goedhart"
           - else
             - if (i % 2 == 0)
-              div(class="intro-author") 0#{(i / 2) + 1}&nbsp;&nbsp;#{author.fullname}
+              div(class="intro-author")
+                != "0" + ((i / 2) + 1) + "&nbsp;&nbsp;" + author.fullname.split(' ').join('&nbsp;')
             - else
-              div(class="intro-author") 0#{((i + 11) / 2)}&nbsp;&nbsp;#{author.fullname}
+              div(class="intro-author")
+                != "0" + ((i + 11) / 2) + "&nbsp;&nbsp;" + author.fullname.split(' ').join('&nbsp;')
 
 
     div(class="intro-fact intro-speeches delay-show", data-700="bottom:-50%",
@@ -68,7 +72,11 @@ block content
       div(class="module-header first")
         h1 PATTERNS IN SPEECH
         p.
-          From the inception of UNHCR in 1951 to 2014, there have been 703 recorded speeches given by the 10 high commissioners. As times have changed and priorities shifted, their rhetoric has evolved. The visualization below examines the frequency at which a word is mentioned in a speech. The height of a bar corresponds with the mentions of a word in a speech. Try searching for your own terms, some good ones to try are: education, gender, camps, innovation and urban. By hovering over a bar, you will be able to view the sentences where that particular word was mentioned. Also try click and dragging to analyze only a certain section of the figure.
+          Since UNHCR launched in 1951, there’ve been 10 high commissioners who’ve given a total of 703 speeches with a grand total of 1,774,931 words. Naturally, over the years their rhetoric has changed to match shifting priorities. But, of the 1 million+ words spoken about refugees, which are the most common? This visualization shows how many times a single word is mentioned in a speech. Try searching for your own words. When you hover over a bar, you’ll be able to view the sentences where that particular word was mentioned.
+
+        p.
+          Fun tip: try clicking and dragging to analyse just one section of the graph.
+
       div(class="module-body")
         div(class="legend-container")
         div(id="figure")
@@ -92,7 +100,7 @@ block content
       div(class="module-header")
         h1 WORD TRENDS
         p.
-          While examining a word mentioned in a document is useful, it does not address trends per year, but rather the trends of each consecutive speech regard. Below, each graph shows the trend of a word over UNHCR’s history. The word is then normalized by counting the number of mentions per 1000 words.
+          How do words measure up over time? Are there some words that were used more ten years ago than they are now? This graph shows the trend of a word over UNHCR’s history. Trends are measured by counting the number of mentions per 1000 words.
       div(class="module-body")
         div(class="col-md-6 col-md-offset-4 search-container")
           input(type="text", id="words-per-year-search", placeholder="")
