@@ -48,10 +48,8 @@ Diction.Figures.Author = Backbone.View.extend({
         y = this.y,
         self = this;
 
-    console.log(x.range());
-
     var backgroundBars = this.g.selectAll('.word-background-bar').data(this.data);
-    backgroundBars.enter().append('rect')
+    backgroundBars.enter().append('rect');
 
     backgroundBars.attr('class', function(d, i) {
         return ['word-background-bar', 'transparent'].join(' ');

@@ -5,14 +5,12 @@ Diction.Figures.Timeline = Backbone.View.extend({
   initialize: function(attrs) {
     var defaults = {
       height: 400,
-      width: 800,
+      width: $(window).width() * (4/5),
       svg: d3.select('#timeline'),
       data: [],
       margin: { top: 30, bottom: 10, left: 110, right: 110 },
       docs: new Diction.Collections.Doc()
     };
-
-    defaults.width = $(window).width() * (4/5);
 
     _.defaults(this, attrs, defaults);
 
