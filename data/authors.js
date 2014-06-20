@@ -14,7 +14,7 @@ module.exports = {
   },
   {
     id: 'lubbers',
-    fullname: 'Rudd Lubbers',
+    fullname: 'Ruud Lubbers',
     url: 'http://www.unhcr.org/pages/49da08dd6.html',
     startYear: 2001,
     endYear: 2005,
