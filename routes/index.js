@@ -26,7 +26,7 @@ exports.popularWordsByAuthor = function(req, res) {
 };
 
 exports.search = function(req, res) {
-  var query = req.param('query');
+  var query = req.param('query') || '';
 
   db.WordDoc.findAll({ where: { word: natural.PorterStemmer.stem(query)  } }).success(function(docs) {
 
@@ -36,8 +36,7 @@ exports.search = function(req, res) {
 };
 
 exports.wordsPerYear = function(req, res) {
-  console.log(req.param('query'));
-  var query = natural.PorterStemmer.stem(req.param('query'));
+  var query = natural.PorterStemmer.stem(req.param('query') || '');
 
   db.sequelize.query(queries.WordsPerYear(query)).success(function(rows) {
     res.json(200, rows);
@@ -46,7 +45,7 @@ exports.wordsPerYear = function(req, res) {
 };
 
 exports.sentences = function(req, res) {
-  var word = req.param('word'),
+  var word = req.param('word') || '',
       documentId = req.param('documentId');
 
   db.SentenceDoc.findAll({ where: { word: word, documentId: documentId } }).success(function(sentences) {
