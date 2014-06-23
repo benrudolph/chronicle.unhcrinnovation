@@ -1,7 +1,7 @@
 require "capistrano/node-deploy"
 
 set :application, "unhcrdiction"
-set :repository,  "git@github.com:/benrudolph/unhcrdiction"
+set :repository,  "git@github.com:/benrudolph/chronicle.unhcrinnovation"
 set :scm, :git
 set :user, :deploy
 set :deploy_to, "/var/www/#{application}"
