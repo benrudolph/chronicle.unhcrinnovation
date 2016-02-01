@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash');
 
 module.exports = function(sequelize, DataTypes) {
   var Doc = sequelize.define('Doc', {

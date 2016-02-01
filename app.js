@@ -1,6 +1,5 @@
 var cluster = require('cluster');
 var nap = require('nap');
-var nodemailer = require('nodemailer');
 var fs = require('fs');
 
 

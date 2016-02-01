@@ -1,3 +1,6 @@
 source 'https://rubygems.org'
 
-gem "capistrano-node-deploy"
+group :development do
+    gem 'capistrano', '~> 2'
+    gem "capistrano-node-deploy"
+end

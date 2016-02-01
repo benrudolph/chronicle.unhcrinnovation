@@ -23,7 +23,6 @@ role :db,  "personal", :primary => true
 namespace :db do
   task :config, :except => { :no_release => true }, :role => :app do
     run "cp -f ~/chronicle.json #{release_path}/config/config.json"
-    run "cp -f ~/email.json #{release_path}/config/email.json"
   end
 
   task :migrate, :except => { :no_release => true }, :role => :app do

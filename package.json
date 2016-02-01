@@ -11,20 +11,20 @@
     "jade": "*",
     "less-middleware": "*",
     "less": "*",
-    "nodemailer": "*",
-    "underscore": "*",
     "nano": "*",
     "natural": "*",
     "ejs": "*",
-    "gulp": "*",
     "stopwords": "*",
     "json2csv": "*",
-    "Sentimental": "*",
     "sentence-tokenizer": "*",
     "sequelize": "*",
     "mysql": "*",
     "node-mysql": "*",
     "lodash": "*",
     "sequelize-cli": "*"
+  },
+  "devDependencies": {
+    "gulp": "*",
+    "Sentimental": "*"
   }
 }
