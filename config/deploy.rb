@@ -1,6 +1,6 @@
 require "capistrano/node-deploy"
 
-set :application, "unhcrdiction"
+set :application, "chronicle"
 set :repository,  "git@github.com:/benrudolph/chronicle.unhcrinnovation"
 set :scm, :git
 set :user, :deploy
@@ -10,11 +10,9 @@ set :app_command, 'app.js'
 set :keep_releases, 5
 set :node_env, 'production'
 
-role :web, "176.58.105.165"                          # Your HTTP server, Apache/etc
-role :app, "176.58.105.165"                          # This may be the same as your `Web` server
-role :db,  "176.58.105.165", :primary => true
-role :db,  "176.58.105.165"
-
+role :web, "personal"                          # Your HTTP server, Apache/etc
+role :app, "personal"                          # This may be the same as your `Web` server
+role :db,  "personal", :primary => true
 
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
@@ -24,7 +22,7 @@ role :db,  "176.58.105.165"
 #
 namespace :db do
   task :config, :except => { :no_release => true }, :role => :app do
-    run "cp -f ~/unhcrdiction.json #{release_path}/config/config.json"
+    run "cp -f ~/chronicle.json #{release_path}/config/config.json"
     run "cp -f ~/email.json #{release_path}/config/email.json"
   end
 
