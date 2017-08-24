@@ -14,3 +14,10 @@ gulp db:load
 ```
 node app.js
 ```
+
+### Deploying
+
+```
+cap production deploy
+cap production deploy:restart
+```
