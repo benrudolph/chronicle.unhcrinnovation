@@ -31,6 +31,7 @@ exports.search = function(req, res) {
 
   db.WordDoc.findAll({ where: { word: natural.PorterStemmer.stem(query)  } }).done(function(docs) {
 
+    console.log(docs.length)
     res.json(200, docs);
   });
 
@@ -40,7 +41,7 @@ exports.wordsPerYear = function(req, res) {
   var query = natural.PorterStemmer.stem(req.param('query') || '');
 
   db.sequelize.query(queries.WordsPerYear(query)).done(function(rows) {
-    res.json(200, rows);
+    res.json(200, rows[0]);
   });
 
 };
