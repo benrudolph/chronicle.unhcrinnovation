@@ -25,7 +25,12 @@ gulp.task('db:destroy', function() {
 
 gulp.task('db:load', function() {
   var load = require('./lib/load');
-  load();
+  console.log('Loading docs...')
+  load()
+
+  // Load Word and sentence docs
+  console.log('Loading word and sentence docs...')
+  load('words');
 });
 
 gulp.task('db:views', function() {
