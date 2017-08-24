@@ -79,8 +79,9 @@ module.exports = {
       title: DataTypes.STRING,
       date: DataTypes.STRING,
       by: DataTypes.STRING,
-      sentiment_comp: DataTypes.FLOAT,
-      sentiment_score: DataTypes.FLOAT,
+      sentimentComp: DataTypes.FLOAT,
+      sentimentScore: DataTypes.FLOAT,
+      wordCount: DataTypes.INTEGER,
       content: DataTypes.TEXT
     },
     {

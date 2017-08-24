@@ -33,7 +33,7 @@ module.exports = {
 
     var db = require('../models');
     var authors = require('../data/authors').authors;
-    db.Author.bulkCreate(authors).success(function() {
+    db.Author.bulkCreate(authors).done(function() {
       done();
     });
   },

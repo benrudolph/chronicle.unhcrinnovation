@@ -2,7 +2,7 @@ var _ = require('lodash');
 
 module.exports = function(sequelize, DataTypes) {
   var Author = sequelize.define('Author', {
-    id: DataTypes.STRING,
+    id: { type: DataTypes.STRING, primaryKey: true },
     fullname: DataTypes.STRING,
     startYear: DataTypes.INTEGER,
     endYear: DataTypes.INTEGER,
@@ -20,14 +20,13 @@ module.exports = function(sequelize, DataTypes) {
         Author.hasMany(models.WordDoc, { foreignKey: 'author' });
       },
     },
-    instanceMethods: {
-      cssClass: function() {
-        if (this.id === 'hocké')
-          return 'hocke';
-        return this.id;
-      }
-    }
   });
+
+  Author.prototype.cssClass = function() {
+    if (this.id === 'hocké')
+      return 'hocke';
+    return this.id;
+  }
 
   return Author;
 };

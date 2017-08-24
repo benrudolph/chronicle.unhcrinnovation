@@ -7,7 +7,8 @@ var fs        = require('fs')
 var config = (JSON.parse(fs.readFileSync("config/config.json", "utf8")))[process.env.NODE_ENV || 'development'];
 var sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
-    dialect: config.dialect
+    dialect: config.dialect,
+    storage: config.storage,
   });
 
 fs

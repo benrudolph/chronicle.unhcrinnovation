@@ -4,6 +4,7 @@
     "password": null,
     "database": "unhcrdiction",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "sqlite",
+    "storage": "chronicle.db"
   }
 }
