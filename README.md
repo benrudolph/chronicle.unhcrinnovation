@@ -19,5 +19,5 @@ node app.js
 
 ```
 cap production deploy
-cap production deploy:restart
+cap production deploy:start
 ```
