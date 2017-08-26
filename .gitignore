@@ -1,6 +1,7 @@
 node_modules
 public/assets
 config/email.json
+config/config.json
 log/*
 chronicle.db
 out.txt
