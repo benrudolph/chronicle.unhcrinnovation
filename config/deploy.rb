@@ -4,6 +4,7 @@ lock "3.9.0"
 set :application, "chronicle"
 set :repo_url, "git@github.com:benrudolph/chronicle.unhcrinnovation.git"
 set :branch, "master"
+set :default_env, { NODE_ENV: "production" }
 
 require 'capistrano-npm'
 
@@ -41,7 +42,7 @@ set :keep_releases, 3
 set :linked_dirs, %w(
   node_modules
 )
-set :linked_files, %w{config/production.json chronicle.db}
+set :linked_files, %w{config/config.json chronicle.db}
 
 namespace :deploy do
   desc 'Install node modules'
@@ -53,10 +54,17 @@ namespace :deploy do
     end
   end
 
-  desc 'Restart application'
-  task :restart do
+  desc 'Start application'
+  task :start do
     on roles(:app), in: :sequence, wait: 5 do
-      execute "forever start #{release_path.join('app.js')}"
+      execute "pm2 start #{release_path.join('app.js')}"
+    end
+  end
+
+  desc 'Stop application'
+  task :stop do
+    on roles(:app), in: :sequence, wait: 5 do
+      execute "pm2 stop app"
     end
   end
 
